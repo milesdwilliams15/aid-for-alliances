@@ -1,0 +1,223 @@
+---
+title: "data cleaning"
+author: "Miles D. Williams"
+date: "Started: 2022-06-01 --- Updated: `r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# libraries
+library(tidyverse)
+library(here)
+```
+
+
+### attach the data
+
+```{r}
+# aid data from CRS: US Dollar, Millions, 2020 constant
+aid_data <- read_csv(
+  "../01_data/crs_data_2005_2014_channel.csv"
+)
+aid_data <- 
+  aid_data %>%
+  mutate(
+    donor = countrycode::countrycode(
+      Donor, "country.name", "iso3c"
+    ),
+    recipient = countrycode::countrycode(
+      Recipient, "country.name", "iso3c"
+    ),
+    year = Year
+  ) 
+total_aid_data <- aid_data %>%
+  group_by(donor, recipient, year) %>%
+  summarize(
+    total_oda = sum(Value, na.rm=T),
+    gov_oda = sum(Value[Channel=='Public Sector'], na.rm=T),
+    ngo_oda = sum(Value[Channel=='NGOs & Civil Society'], na.rm=T),
+    ppp_oda = sum(Value[Channel=='Public-Private Partnerships'], na.rm=T),
+    mlt_oda = sum(Value[Channel=='Multilateral Organizations'], na.mr=T),
+    otr_oda = sum(Value[Channel=='Other'], na.rm=T),
+    trt_oda = total_oda - gov_oda - ngo_oda - ppp_oda - mlt_oda - otr_oda
+  ) %>% na.omit
+possible_dyads <- expand.grid(
+  donor = unique(total_aid_data$donor),
+  recipient = unique(total_aid_data$recipient),
+  year = unique(total_aid_data$year)
+)
+total_aid_data <- possible_dyads %>%
+  left_join(
+    total_aid_data,
+    by = c('donor', 'recipient', 'year')
+  ) %>%
+  mutate(
+    across(
+      total_oda:trt_oda,
+      ~ replace_na(.x, 0)
+    )
+  )
+  
+# the ATOP dataset
+atop <- read_csv(
+  "../01_data/atop_dyad_year.csv"
+)
+atop <- # need to recover individual country cow codes
+  atop %>%
+  separate(
+    ddyad,
+    into = c('donor', 'recipient'),
+    sep = -3
+  ) %>%
+  mutate(
+    donor = countrycode::countrycode(
+      as.numeric(donor), "cown", "iso3c"
+    ),
+    recipient = countrycode::countrycode(
+      as.numeric(recipient), "cown", "iso3c"
+    )
+  ) %>%
+  select(
+    donor, recipient, year,
+    atopally:consul, asymm
+  )
+
+# bring in additional covariates
+cov_data <- read_csv(
+  "../01_data/final_data.csv"
+) %>%
+  mutate(
+    donor = countrycode::countrycode(
+      donor, "country.name", "iso3c"
+    ),
+    recipient = countrycode::countrycode(
+      recipient, "country.name", "iso3c"
+    )
+  ) %>% # drop alliance measure
+  select(-ally)
+
+# include a measure of FDI
+fdi <- read_csv(
+  "../01_data/oecd_fdi_flows.csv"
+)
+
+fdi <- fdi %>%
+  filter(
+    FLOW == "OUT",
+    Currency == "US Dollar"
+  ) %>%
+  select(
+    `Reporting country`,
+    `Partner country`,
+    Year,
+    Value
+  ) 
+names(fdi) <- c(
+  "donor",
+  "recipient",
+  "year",
+  "fdi"
+)
+fdi <- fdi %>%
+  mutate(
+    donor = countrycode::countrycode(
+      donor, "country.name", "iso3c"
+    ),
+    recipient = countrycode::countrycode(
+      recipient, "country.name", "iso3c"
+    )
+  ) %>%
+  filter(
+    !is.na(donor),
+    !is.na(recipient)
+  )
+
+# include WGI
+wgi <- haven::read_dta(
+  here("01_data/wgidataset.dta")
+)
+
+wgi <- wgi %>% # make aggregate of 5 indicators and drop everything else
+  mutate(
+    wgi = (pve + gee + rqe + rle + cce) / 5
+  ) %>%
+  group_by(year) %>%
+  mutate(
+    wgi_rank = rank(wgi, na.last = 'keep')
+  ) %>%
+  ungroup %>%
+  select(
+    code, year, wgi, wgi_rank
+  ) %>%
+  rename(
+    recipient = code
+  )
+
+# merge the datasets
+full_data <- total_aid_data %>%
+  left_join(
+    fdi,
+    by = c('donor', 'recipient', 'year')
+  ) %>%
+  left_join(
+    cov_data,
+    by = c('donor', 'recipient', 'year')
+  ) %>%
+  left_join(
+    atop,
+    by = c('donor', 'recipient', 'year')
+  ) %>%
+  left_join(
+    wgi,
+    by = c('recipient', 'year')
+  )
+full_data <- full_data %>%
+  filter(!is.na(aid)) %>%
+  # fill in alliance NAs with 0s
+  mutate(
+    across(atopally:consul,
+           ~ replace_na(.x, 0))
+  )
+```
+
+
+
+### deal with missingness in FDI and WGI
+
+```{r}
+library(missRanger)
+```
+
+```{r}
+imp_data <- full_data %>%
+  missRanger(
+    pmm.k = 3
+  )
+```
+
+
+### Drop invalid donor-years
+
+```{r}
+final_data <- imp_data %>%
+  group_by(
+    donor, year
+  ) %>%
+  filter(
+    max(total_oda) > 0
+  )
+final_data
+```
+
+
+### save the final dataset
+
+```{r}
+write_csv(
+  final_data,
+  file = "../01_data/cleaned_data.csv"
+)
+```
+

@@ -1,0 +1,203 @@
+---
+title: "Aid for Alliances? Buying and Selling Alliances in the Political Economy of Aid"
+author: "Miles D. Williams"
+date: '2022-07-01'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F,
+                      warning = F,
+                      message = F,
+                      out.width = '100%',
+                      fig.align = 'center')
+```
+
+This study is important for three reasons. First, it contributes to a growing literature that recognizes linkages between issues in international political economy and international security that historically have been studied in isolation. In particular, this study demonstrates how both foreign aid and military alliances (highly important and regularly studied variables in these respective fields) are deeply intertwined.
+
+Second, this study contributes to our understanding of the role that alliances play in interactions between powerful industrialized countries and comparatively weak developing countries. Specifically, this study underlines how alliances operate as a form of exchange but with differing implications depending on the content alliance promises. Of the two most common kinds of alliances that exist between industrialized countries and developing countries---nonaggression pacts and defensive pacts---the former reflects a concession made by weaker states to strong ones while the latter reflects a concession made by stronger states to weak ones. The demonstration of this difference in the direction of exchange implied by alliance provisions adds to a growing literature that continues to probe the content of alliances and how different security pacts lead to different kinds of behavior by signatories.
+
+Third, and finally, this study joins more recent contributions to the aid literature that have begun to exploit more granular data on aid sectors and delivery channels to better understand the mechanisms and strategies that determine how global development financing gets distributed in developing countries. On this front, this study problematizes the conventional wisdom on aid delivery tactics and donor motives. While some have argued that government-to-government transfers are primarily linked to non-development foreign policy goals for donors while transfers that bypass the recipient government are primarily linked to the promotion of public goods (Dietrich 2013; Steinwand 2015), this study demonstrates that bypass aid is in fact tied to non-development aid-for-policy exchanges (e.g., the buying and selling of alliance commitments). This finding does not negate the view that bypass aid is primarily directed toward the promotion of public goods. To the contrary, and even more surprisingly, it shows that non-development foreign policy goals can be a motivation for directly supporting the promotion of public goods in developing countries. As others have shown, the line between altruism and self-interest is blurry (Bermeo 2017, 2018; Heinrich 2013).
+
+
+# The Logic of Alliances and Exchange in the Political Economy of Aid
+
+The theoretical model that follows is a highly stylized and simplified model of the interactions that take place between industrialized and developing country governments. This simplicity is useful because it helps to draw a sharp analytical distinction between two kinds of alliance characteristics and their implications for resource transfers between industrialized and developing countries. The model further helps in to demonstrate how aid delivery strategies can be differently affected by alliance promises. In particular, the model underscores that aid that is delivered in such a way that ensures it is earmarked explicitly for development, or the production of public goods, can also help to reduce opportunity costs related to non-development aid-for-policy exchanges. Thus, contrary to the conventional view on aid delivery tactics and donor motives, both more fungible government-to-government aid transfers and less fungible aid transfers that bypass the recipient government and go to NGOs or multilateral organizations to ensure aid supports donors' development objectives can serve as complementary components of aid-for-policy deals.
+
+
+## Baseline: Development Interactions
+
+Following Bermeo (2018) we can model development and non-development interactions between an industrialized country $i$ and a developing country $x$. To establish a base-line, a simplified case where countries interact solely on the basis of development is introduced in this section. Following this, non-development interactions are added, first in the form of industrialized country efforts to purchase closer cooperation with a developing country through the formation of alliance commitments and, second, in the form of substitutable alliance commitments from the industrialized country in the context of an already existing status quo aid-for-policy exchange.
+
+Let utility for an industrialized country $i$ be given as
+$$
+u_i = 
+d\left(r_i \right) + v_i(R_i - r_i),
+$$
+where $r_i \geqslant 0$ represents resources (foreign aid, but also political capital) expended on promoting public goods (such as economic or social development) in recipient $x$. $R_i \geqslant 0$ denotes the total resource endowment of $i$. The function $v_i(R_i - r_i)$ denotes the utility that $i$ receives from expending its resources on all activities other than promoting development in $x$. This function is monotonically increasing in $R_i - r_i$ with diminishing returns. The expression $d \left( r_i\right)$ captures the production of development in $x$ given resources from $i$. It is assumed to be increasing in $r_i$ with diminishing returns to development resources.
+
+Utility for $x$ is similarly represented as
+$$
+u_x = d \left(r_i \right) + v_x(R_x).
+$$
+In the above, $R_x \geqslant 0$ is $x$'s resource endowment where $v_x(R_x)$ represents the utility $x$ receives from expending resources on non-development related objectives. The production of development in $x$ given $i$'s expenditure of resources also enters the utility function for $x$.
+
+In this base-line set-up, $x$ always accepts resources from $i$ since there is no exchange between countries. The equilibrium provision of resources from $i$ therefore is identified solely by the level of $r_i$ that satisfies the first-order conditions derived from the equation for $i$'s utility:
+$$
+\frac{\partial u_i}{\partial r_i} = \frac{\partial d_i}{\partial r_i} - \frac{\partial v_i}{\partial r_i} = 0.
+$$
+The equilibrium provision of $r_i$, as we would intuitively expect, will depend on the returns to scale and technology of development production relative to returns from the various other objectives of $i$. 
+
+
+## Case 1: Buying Alliance Commitments
+
+Suppose now that as $i$ and $x$ interact, they also engage in non-development exchanges. Say industrialized country $i$ seeks to promote greater policy or security alignment with $x$ and attempts to do so by getting $x$ to concede to certain formalized alliance commitments. If this can be accomplished, it will add to $i$'s utility by $M_x > 0$. However, as would be expected with any such policy exchange, conceding to alliance commitments imposes a cost on $x$ which is represented by $C_x > 0$. To make the concession incentive compatible, the government of $x$ is in a position to demand compensation from $i$, which may come in the form of an increase in development resources *or* in the form of fungible (no-strings-attached) resources denoted $f_i \geqslant 0$. Though in practice the line between these kinds of transfers is blurry, it may be helpful to imagine that $r_i$ is akin to non-fungible "bypass" aid while $f_i$ is an entirely fungible government-to-government transfer (Dietrich 2013).
+
+Denote, now, the total package of resources delivered to $x$ as $s_i$ where $s_i = \tilde r_i + f_i$. The value $\tilde r_i$ represents the allocation of development resources from $i$ when there is a policy deal. The different components of this aid package are given to $x$ via two alternative "channels." While $\tilde r_i$, as before, goes directly toward the promotion of development in $x$, $f_i$ enters $x$'s utility function in $v_x(\cdot)$. Utility for $i$ now is represented as
+$$
+u_i = 
+\begin{cases}
+d\left(r_i \right) + v_i(R_i - r_i) & \text{if } \neg M_x \\
+d\left(\tilde r_i \right) + v_i(R_i - s_i) + M_x & \text{otherwise}
+\end{cases}.
+$$
+Utility for $x$ further is represented as
+$$
+u_x = 
+\begin{cases}
+d\left(r_i \right) + v_x(R_x) & \text{if } \neg M_x \\
+d\left(\tilde r_i \right) + v_x(R_x + f_i) - C_x & \text{otherwise}
+\end{cases}.
+$$
+
+A policy concession will be incentive compatible for $i$ if the benefit of the concession is greater than the cost imposed by the aid package $s_i$:
+$$
+M_x \geqslant \overbrace{v_i(R_i - r_i) - v_i(R_i - \tilde r_i - f_i)}^{\Delta \text{ non-development utility}} - \overbrace{d\left( r_i \right) - d\left(\tilde r_i \right)}^{\Delta \text{ development}}.
+$$
+The first component of the above inequality constraint captures the loss to $i$'s available resources to expend on activities outside of providing resources to $x$ due to the larger total transfer of aid when there is a policy deal ($r_i < \tilde r_i + f_i$). The second component denotes the change in development promoted in $x$ as a part of possible changes to the composition of the aid package to $x$. It is possible, for instance, that $\tilde r_i < r_i$ if the compensation $x$ requires to provide the concession entails transferring resources away from development and toward fungible revenue for $x$. Alternatively, it is possible that $\tilde r_i > r_i$, implying that an increase in development promotion is part of the overall deal struck between $i$ and $x$ to get $x$ to concede to alliance promises.
+
+In addition to considering the above, $i$ will also consider the cost of the policy concession to $x$. For the concession to be incentive compatible for $x$ it must be that:
+$$
+\overbrace{d\left( \tilde r_i \right) - d\left( r_i \right)}^{\Delta \text{ development}} + \overbrace{v_x(R_x + f_i) - v_x(R_x)}^{\Delta \text{ non-development utility}} \geqslant C_x.
+$$
+This constraint makes all-the-clearer the point that as $i$ makes a resource transfer to $x$, $x$ can experience the benefits of this transfer both via the contribution of fungible resources and via the contribution of development resources that go directly toward the production of development.
+
+With these new sets of constraints, $i$'s objective is to minimize the right-hand side of the first inequality subject to the inequality constraint for $x$. If minimizing satisfies both inequality constraints, a deal will be made between $i$ and $x$. Most relevant for considering the difference the presence or absence of an alliance between $i$ and $x$ makes are the following two points:
+
+1. The total aid package given to $x$ by $i$ will be larger than absent the alliance commitment: $r_i < s_i$.
+2. This increase may entail *both* an increase in fungible aid ($f_i > 0$) *and* an increase in non-fungible development aid ($\tilde r_i > r_i$). The precise implications for the composition of the total transfer will depend on the technology of and returns to development and the importance of promoting other goals both for $i$ and for $x$.
+
+
+## Case 2: Supplying Alliance Commitments
+
+The above case illustrates how purchasing alliance commitments fits into a broader framework of development and non-development interactions and exchanges between industrialized and developing countries. However, alliance commitments do not always represent concessions that industrialized countries buy from developing countries. Given the differences in wealth and power between these countries, some alliance promises clearly disproportionately benefit developing country signatories. 
+
+So why might industrialized countries offer such alliance commitments? They may do so to the extent that such commitments offset transaction costs involved in supporting existing policy deals between $i$ and $x$. Suppose an existing status quo deal exists between $i$ and $x$ where utility for $i$ is given as
+$$
+u_i = d\left(\tilde r_i\right) + v_i(R_i - s_i) + M_x,
+$$
+and where utility for $x$ is
+$$
+u_x = d\left(\tilde r_i \right) + v_x(R_x + f_i) - C_x.
+$$
+
+Suppose a certain alliance commitment from $i$ is worth some value $D_i>0$ to $x$ and acts as a positive externality so that the developing country government's utility with the alliance commitment is
+$$
+u_x = \left( \dot r_i\right) + v_x(R_i + \dot f_i) - C_x + D_x.
+$$
+In the above $\dot r_i$ and $\dot f_i$ denote the elements of a new aid package that ensures incentive compatibility for a policy deal. Suppose further that this alliance commitment costs $i$ a share of its resources:
+$$
+u_i = d\left( \dot r_i\right) + v_i(R_i - \dot s_i - D_x) + M_x. 
+$$
+The result is a new set of inequality constraints describing the requisite aid package that makes a non-development policy deal incentive compatible for the countries. Under this new set of constraints we expect a reduction in the aid package required to make an existing deal incentive compatible $\dot s_i < s_i$ (where $\dot s_i$ is the new aid package). This new package will, at minimum entail a reduction in fungible aid to $x$ and possibly a reduction to development aid as well. 
+
+In sum, then, the following two conclusions follow:
+
+1. Alliance commitments from industrialized countries to developing countries will substitute for some share of aid going to a developing country.
+2. Whether this will result in cuts to both fungible and non-fungible resources will depend on the technology of and returns to scale of development relative to the importance of other objectives for both $i$ and $x$.
+
+
+# From Theory to Testable Predictions for Alliances and Aid
+
+The model of development and non-development interactions between industrialized countries and developing countries in the previous section implies some specific and testable hypotheses for the relationships between different kinds of alliance commitments and foreign aid. It also raises some questions. In particular, when alliance promises reflect a commitment from industrialized countries to developing countries, we should expect that recipient governments will be willing to accept these alliance promises in lieu of some share of aid that donor governments give to recipients to make non-development policy deals incentive compatible. This implies a substitution effect for these kinds of alliances. 
+
+Conversely, other kinds of alliance promises reflect donor efforts to buy concessions from recipients. Purchasing such commitments comes with opportunity costs for developing country governments, and thus industrialized country governments must provide a total package of aid that is sufficient to make a policy deal incentive compatible. Such alliance promises should therefore correspond with greater levels of aid from a donor to a recipient.
+
+Beyond the above, the model suggests that it is possible for changes in the size of the total aid package to be attended by alterations to the way aid is delivered---either in ways that specifically ensure aid is dedicated to development purposes or via fungible government-to-government transfers. The model itself does not yield specific predictions, save to imply that the supply of aid through alternative channels given the presence or absence of alliance commitments may differ. For instance, while the theoretical framework implies that the total aid package delivered to a developing country will be larger when industrialized countries buy alliance commitments, it is possible that this increase will come entirely in the form of a fungible government-to-government exchange of resources and a decline in resources earmarked specifically for development. Conversely, when alliance commitments substitute for aid, it is plausible that as an industrialized country makes cuts to the total aid package delivered to a developing country, the cuts may be entirely to government-to-government transfers while being attended by an increase to resources dedicated expressly for development. It is therefore important not only to test how alliance promises relate to total aid transfers from industrialized to developing countries, but also to examine which aid delivery channels drive these relationships.
+
+To translate these theoretical predictions and open questions into an empirical research design, it will be necessary to draw insights from relatively recent research that probes questions about donor governments' aid delivery tactics and the nature and purpose of different kinds of alliances. Different aid delivery channels are associated with differing degrees of fungibility. These differences can be exploited to assess how predicted shifts in the total amount of aid delivered play out within the alternative aid channels highlighted in the theoretical model. Further, different kinds of alliances reflect differing commitments between signatories. Some alliances clearly represent a security commitment from industrialized countries to developing ones while other alliances reflect efforts at promoting cooperation in the face of past or existing tensions between alliance partners. Below I consider these issues in turn and propose testable hypotheses.
+
+
+## Aid Delivery
+
+From Dietrich (2013) we know that donor governments alter their aid delivery tactics in light of the quality of governance in the countries that receive aid. As Dietrich notes, while the conventional wisdom holds that donor governments use aid as a medium of exchange to buy influence over recipient governments (see Bueno de Mesquita and Smith 2009), donor motives are not always so cynical. To the contrary, Dietrich argues that donors often care about maximizing aid's impact on recipient development as well. 
+
+To support this argument, she exploits cross-national variation in the quality of governance in recipient countries and variation in the delivery channels donor governments use to give aid in recipients. On the one hand, donors can give aid directly to the recipient government (what is called the government-to-government or public channel) or they can give aid directly to non-state actors such as NGOs that operate in recipient countries (what is called the bypass channel). Dietrich contends that to the extent that donors care about development outcomes, they will direct more of their aid through the bypass channel rather than through the public channel in recipients that have poorer governance.^[This interpretation also aligns with Steinwand (2015) who argues that bypass aid tends to be most associated with the promotion of public goods in recipient countries. Of course, the tactic of bypassing recipient governments when government capacity is low is not universal to all donors, as is shown in Dietrich (2021).]
+
+Empirical analysis supports this expectation. Dietrich (2013) shows that donor governments, indeed, tailor their aid delivery tactics to ensure aid is used for its indented purposes when the recipient government is not a trustworthy actor. Specifically, Dietrich shows that donor governments, on average, bypass the government-to-government channel in allocating foreign aid in inverse proportion to the quality of recipient governance.
+
+Evidence of this behavior has been provided elsewhere. Using a very different research design to arrive at a similar conclusion, Bermeo (2018) finds that governance quality leads to changes in the sectoral composition of foreign aid depending on the degree to which certain kinds of aid tend to most often be delivered via the public or bypass channel. In particular, aid in economic and governance and social program sectors tend more often to go through the government-to-government channel. Meanwhile, humanitarian assistance tends to go disproportionately through the bypass channel. Consistent with these differences in aid delivery tactics across sectors, Bermeo finds that improvements in governance quality lead to increases in general budget support, economic infrastructure aid, and aid given to production sectors. At the same time, governance improvements lead to a reduction in humanitarian assistance. These patterns are consistent with shifts in aid composition like those identified by Dietrich (2013) in the face of recipient governance. As governance improves, donors increase aid to sectors that entail greater recipient government involvement and away from sectors that rely more on non-governmental actors. 
+
+Taken together, these findings suggest that the requisite leverage for probing the aid delivery decisions that link foreign aid and alliance commitments will come from separating out aid that is delivered to the recipient government from aid that bypasses the recipient government. As the theoretical model implies, development aid can possibly be cut in an effort to craft an incentive compatible aid package, but an increase to development aid can also support incentive compatibility. In this way, counter to conventional wisdom, bypass aid can not only be a means to achieve an industrialized country's development goals, but also a means to leverage non-development policy concessions (such as alliance commitments). By looking beyond the relationship between alliances and total bilateral aid to consider specific aid delivery channels, it will be possible to assess whether the strategy donor governments take to realize or to offer alliance commitments entails parallel or inverse changes to aid delivered through bypass channels and directly to the recipient government.
+
+
+## Alliance Commitments
+
+From the theoretical model described in the previous section, we know that when alliance provisions can substitute for resources given in the form of fungible aid, the overall package of aid given by donors to recipients will be smaller. Conversely, when alliance provisions reflect donor efforts to buy commitments from recipients, the alliance provisions should lead to greater allocation of resources from donors. 
+
+The widely used ATOP dataset which documents different kinds of obligations between countries that are formalized in alliances among states over time draws distinctions between five kinds of commitments (Leeds et al. 2002). Two of these kinds of alliance obligations are most relevant when considering relations between industrialized and developing countries: (1) defensive pacts and (2) nonaggression pacts. 
+
+The reason for the importance of these alliance commitments relative to others is not rooted purely in theory but rather a descriptive reality. Defensive and nonaggression pacts are simply the most common kinds of alliances that are formed between industrialized and developing countries. Other kinds of alliances---offensive pacts, neutrality pacts, and consultation pacts---are either nonexistent, infrequent, or arguably subsumable under one of the other kinds of alliances. Offensive pacts are simply nonexistent between industrialized and developing country governments. Neutrality pacts, meanwhile, are rare. Between 1995 and 2014 neutrality pacts were formed between only seven industrialized country and developing country pairs. Further, all of these pacts corresponded with nonaggression commitments. The presence or absence of consultation pacts, finally, is nearly singular to the presence or absence of defensive pacts. For pairs of industrialized and developing countries between 1995 and 2014, 99.3% of dyad-year observations are equivalent with respect to the presence or absence of consultation and defensive commitments. The latter arguably constitutes a more substantive commitment between partners---either mutual or asymmetric commitments to provide military support in the event of attack---while the former simply commits states to consult on military matters but does not oblige members to take specific actions.
+
+While defensive and nonaggression pacts are most relevant with respect to interactions between industrialized and developing country governments as a descriptive matter, from a theoretical perspective these two alliances can be exploited to test the different linkages between alliance commitments and foreign aid. Defensive pacts imply very different kinds of commitments being made between partners relative to nonaggression pacts, and these differences can be leveraged to identify the role of alliances either as a substitute for aid or as a concession bought by industrialized countries in exchange for greater aid.
+
+Substitution should be most relevant with respect to defensive alliances. Given the power asymmetries between donor countries and recipient countries, a defensive pact most often reflects a commitment from the former to the latter. Indeed, many defensive pacts between comparatively more powerful industrialized countries and weaker developing ones are often themselves explicitly asymmetrical---for instance, the United States and South Korea share a defensive alliance that commits the US to defend South Korea, but not South Korea to defend the US. The direction of benefits conferred by such an alliance, then, is often explicitly a clear commitment from an industrialized country to a developing one. But, even when the commitment is not asymmetrical in writing, the asymmetry in power alone between industrialized countries and developing countries suggests that the commitment is *de facto* asymmetrical (to the benefit of the developing country) even if not *de jure*. 
+
+As opposed to defensive alliances, which reflect a commitment from industrialized countries to developing countries, nonaggression pacts are often the result of efforts to smooth over differences between signatories. Unlike other kinds of commitments (such as neutrality pacts), nonaggression treaties usually deal specifically with the bilateral relations between signatories and commit partners to depute settlement short of resorting to violence (see Leeds et al. 2002 and Leeds 2003). More generally, as Lupu and Poast (2016) note, the conventional view on nonaggression treaties is that they function as a mechanism for overcoming cooperation problems---effectively, they act as an international institution helping to reduce transaction costs and to promote greater trust. Such was arguably the case when the United States and Pakistan committed to a nonaggression pact in 2009 when tensions between the two countries had been building with respect to terrorist operations supported by the Pakistani government and US counterterrorism activities that had been perceived as provocative by Pakistan.^[See, for instance, the Enhanced Partnership with Pakistan Act of 2009 passed by the US Congress. Accessible here: <https://www.congress.gov/111/plaws/publ73/PLAW-111publ73.pdf>.] Such alliances, then, signal efforts to promote greater cooperation in the face of differences---an objective that more powerful industrialized countries likely must purchase with the provision of greater aid in order to make cooperation incentive compatible for the developing country government. 
+
+
+## Hypotheses
+
+The above discussion implies specific testable hypotheses regarding the relationship between alliance commitments and foreign aid.
+
+First, as a form of commitment from industrialized to developing countries, defensive alliance membership should be substitutable for some share of foreign aid. 
+
+> H1: When developing countries are members of a defensive alliance with a donor country they will receive less foreign aid, ceteris paribus.
+
+Nonaggression pacts, meanwhile, should have the opposite relationship with aid allocation decisions by industrialized countries. Because such pacts often reflect efforts to promote cooperation in the face of differences, we should expect nonaggression commitments to be complemented with greater total aid going to a developing country as payment for conceding to the nonaggression treaty.
+
+> H2: When developing countries are members of a nonaggression alliance with a donor country they will receive more foreign aid, ceteris paribus.
+
+But, to echo the point made in the preceding sections, changes to the total amount of aid given by an industrialized country to a developing country due to alliances may mask possibly heterogeneous changes in the way aid is delivered. As highlighted by the theoretical model and in the discussion about aid sectors and aid delivery, in the total package of aid donors give to recipients donors can counteract the opportunity cost recipient governments experience in aid-for-policy deals by increasing no-strings-attached government-to-government transfers or by increasing aid earmarked specifically for development or *both*. Conversely, when alliance promises reflect a commitment that donors make to recipients, thus offsetting some of the opportunity costs associated with supporting aid-for-policy deals between a donor and recipient, the total aid package required to support incentive compatibility will be smaller. This will likely result in cuts to fungible government-to-government aid but also possibly development aid.
+
+To probe how alliances shape aid delivery, not just the total amount of aid given, I further separate out bilateral aid given to developing countries by whether aid is given to the public sector or bypasses the public sector, going directly to NGOs, multilateral organizations, and other non-state actors.
+
+
+# Research Design
+
+To test hypotheses 1 and 2---that bilateral defensive (nonaggression) pacts lead donor governments to target less (more) bilateral foreign aid in developing countries---data was on official development assistance (ODA) commitments was collected from the Organization for Economic Cooperation's (OECD) Creditor Reporting System (CRS) from 2005 to 2014.^[Data were accessed from OECD.stat.] Values included total bilateral commitments and commitments by five distinct delivery channels: (1) Public Sector; (2) NGOs and Civil Society; (3) Multilateral Organizations; (4) Teaching Institutions, Research Institutes and Think-Tanks; and (5) Other non-public channels. CRS also has an aid delivery category for Public-Private Partnerships, but the sample contained no recorded instances of aid committed via this channel. Because all ODA values were highly skewed, but also bound at zero, the inverse hyperbolic sine (asinh) was applied to normalize values. In regression analyses, asinh-transformed variables have a similar interpretation to log-transformed values (Bellemare and Wichman 2020).^[Computing elasticities requires some modification, however.]
+
+This data was merged with the yearly dyadic alliances dataset maintained by the Alliance Treaty Obligations and Provisions Project (ATOP). ATOP codes five different kinds of alliance commitments: (1) Defense, (2) Offense, (3) Neutrality, (4) Nonaggression, and (5) Consultation. As noted in the forgoing discussion, only defensive and nonaggression pacts have special relevance in the context of industrialized-developing country interactions. From this dataset, an industrialized country ODA donor and a developing country ODA recipient are coded "1" for a defensive alliance and/or "1" for a nonaggression alliance for each year they are coded as sharing such alliance commitments in the ATOP dataset. 
+
+Defensive pacts, according to the ATOP codebook, "obligate an alliance member to provide active military support to an ally" and specifically "to assist an ally militarily in the event of attack on the ally's sovereignty or territorial integrity" (Leeds 2020, 11). Nonaggression pacts obligate signatories to cooperate short of military action and involve promises between members to avoid military conflict with one another. As the ATOP codebook explicitly notes, "nonaggression pacts are primarily aimed at keeping the peace among alliance members" (Leeds 2020, 11).
+
+To guard against possible endogeneity between alliance commitments and ODA, the alliance variables are lagged by one year in the data.
+
+\clearpage
+
+# Results
+
+```{r, fig.cap="Mixed effect Tobit estimates for the relationship between nonaggression and defensive pacts and total bilateral ODA commitments (left) and ODA commitments delivered alternatively through the government-to-government or bypass channel (right)."}
+library(knitr)
+library(here)
+include_graphics(
+  here("03_figures/main_effects.png")
+)
+```
+
+```{r, fig.cap="Classic Tobit (left) and mixed effects logit (right) estimates for the relationship between nonaggression and defensive pacts and bilateral ODA by specific bypass channel. MO = multilateral organizations; NGO = nongovernmental organizations; TRT = teaching institutions, research institutes or think-tanks; Other = other non-public channels."}
+include_graphics(
+  here("03_figures/bypass_effects.png")
+)
+```
+

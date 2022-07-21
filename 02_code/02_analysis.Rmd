@@ -1,0 +1,999 @@
+---
+title: "analysis"
+author: "Miles D. Williams"
+date: "Started: 2022-06-01 --- Updated: `r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,
+                      warning = FALSE)
+library(tidyverse)
+library(corrr)
+```
+
+
+```{r}
+dt <- read_csv(
+  "../01_data/cleaned_data.csv"
+)
+```
+
+
+```{r}
+dt %>%
+  select(
+    atopally:consul
+  ) %>%
+  as.data.frame %>%
+  stargazer::stargazer(
+    type = "text"
+  )
+```
+
+
+
+## Some Stylized Facts
+
+```{r}
+dt %>%
+  filter(defense==1) %>%
+  summarize(
+    def = mean(consul)
+  )
+```
+
+
+```{r}
+# show me alliances over time
+dt %>%
+  group_by(
+    year
+  ) %>%
+  summarize(
+    across(
+      atopally:consul,
+      ~ mean(.x, na.rm=T)
+    )
+  ) %>%
+  pivot_longer(
+    cols = atopally:consul
+  ) %>%
+  ggplot() +
+  aes(
+    x = year,
+    y = value,
+    color = name
+  ) +
+  geom_line()
+```
+
+```{r}
+# it looks like nonaggression and defensive alliances are most common.
+# can neutrality and consultation alliances be merged with either of these?
+dt %>% # breakdown of other alliance characteristics by consultation alliances
+  group_by(
+    consul
+  ) %>%
+  summarize(
+    across(
+      c(defense, nonagg, neutral),
+      sum
+    )
+  )
+dt %>%
+  group_by(
+    neutral
+  ) %>%
+  summarize(
+    across(
+      c(defense, nonagg, consul),
+      sum
+    )
+  )
+dt %>%
+  select(
+    defense, nonagg, consul, neutral
+  ) %>%
+  correlate()
+```
+
+
+## OLD CODE
+
+```{r}
+dt %>%
+  select(
+    defense:consul
+  ) %>%
+  correlate() %>%
+  focus(
+    -offense, mirror = T
+  ) %>%
+  network_plot()
+```
+
+
+```{r}
+dt %>%
+  select(
+    -offense
+  ) %>%
+  group_by(
+    year
+  ) %>%
+  summarize(
+    across(
+      atopally:consul,
+      sum
+    )
+  ) %>%
+  pivot_longer(
+    atopally:consul
+  ) %>%
+  ggplot() +
+  aes(
+    x = year,
+    y = value,
+    color = name
+  ) +
+  geom_line(
+    size = .75
+  ) +
+  labs(
+    x = "Year",
+    y = "Count of Alliances",
+    color = "Type"
+  )
+```
+
+
+```{r}
+dt %>%
+  select(
+    -offense
+  ) %>%
+  group_by(
+    donor, year
+  ) %>%
+  summarize(
+    across(
+      atopally:consul,
+      sum
+    )
+  ) %>%
+  pivot_longer(
+    atopally:consul
+  ) %>%
+  ggplot() +
+  aes(
+    x = year,
+    y = value,
+    color = name
+  ) +
+  geom_line(
+    size = .75
+  ) +
+  labs(
+    x = "Year",
+    y = "Count of Alliances",
+    color = "Type"
+  ) +
+  facet_wrap(
+    ~ donor
+  )
+```
+
+
+```{r}
+dt %>%
+  group_by(
+    atopally, year
+  ) %>%
+  summarize(
+    oda = mean(total_oda)
+  ) %>%
+  ggplot(
+    aes(x = year, y = oda, color = as.factor(atopally))
+  ) +
+  geom_line()
+dt %>%
+  mutate(
+    type = case_when(
+      defense & nonagg ~ 'Defense + Nonaggression',
+      !defense & nonagg ~ 'Nonaggression only',
+      defense & !nonagg ~ 'Defense only',
+      TRUE ~ 'None'
+    )
+  ) %>%
+  group_by(
+    type, year
+  ) %>%
+  summarize(
+    oda = mean(total_oda)
+  ) %>%
+  ggplot(
+    aes(x = year, y = oda, color = type)
+  ) +
+  geom_line()
+library(socsci)
+dt %>%
+  mutate(
+    type = case_when(
+      defense & nonagg ~ 'Defense + Nonaggression',
+      !defense & nonagg ~ 'Nonaggression only',
+      defense & !nonagg ~ 'Defense only',
+      TRUE ~ 'None'
+    )
+  ) %>%
+  group_by(donor, type) %>%
+  count() %>%
+  group_by(donor) %>%
+  mutate(pct = 100 * n / sum(n)) %>%
+  ggplot(
+    aes(pct, donor, fill = type)
+  ) +
+  geom_col()
+```
+
+
+
+```{r}
+library(AER)
+library(censReg)
+us_oda.1 <- asinh(total_oda) ~ I(defense | nonagg) +
+    asinh(income) + asinh(pop) + asinh(disaster) + civilwar + fh_total +
+    asinh(dist) + asinh(fdi) + asinh(trade) + asinh(usmil) + colony +
+    poly(year, 3)
+us_oda.2 <- update(
+  us_oda.1, ~ . - I(defense | nonagg) + I(nonagg & !defense) + I(nonagg & defense)
+    # defense * nonagg
+)
+us_mil.1 <- update(
+  us_oda.1, asinh(usmil) ~ . - asinh(usmil) + asinh(total_oda)
+)
+us_mil.2 <- update(
+  us_mil.1, ~ . - I(defense | nonagg) + I(nonagg & !defense) + I(nonagg & defense)
+)
+eq_list <- list(
+  'ODA (1)' = us_oda.1,
+  'ODA (2)' = us_oda.2,
+  'MIL (1)' = us_mil.1,
+  'MIL (2)' = us_mil.2
+)
+us_dt <- filter(dt, donor == 'USA')
+us_fits <- map(
+  eq_list,
+  ~ censReg(.x, data = plm::pdata.frame(us_dt, index = 'dyad'), 
+            method = 'BHHH')
+)
+library(texreg)
+cmap <- list(
+  'I(defense | nonagg)TRUE' = 'Alliance',
+  'I(nonagg & !defense)TRUE' = 'Only Nonaggression',
+  'I(nonagg & defense)TRUE' = 'Nonaggression + Defense' 
+)
+screenreg(us_fits, custom.coef.map = cmap)
+```
+
+
+```{r}
+us_dt %>%
+  group_by(year) %>%
+  summarize(
+    alliance = sum(defense | nonagg),
+    nonaggression = sum(nonagg),
+    defensive = sum(defense),
+    both = sum(nonagg & defense)
+  ) %>%
+  pivot_longer(
+    cols = -year
+  ) %>%
+  ggplot() +
+  aes(
+    year,
+    value,
+    color = name
+  ) +
+  geom_line(size = 1)+
+  geom_point() +
+  geom_vline(
+    xintercept = 2008
+  )
+us_dt %>%
+  group_by(year) %>%
+  summarize(
+    alliance = mean(total_oda[defense | nonagg]),
+    nonaggression = mean(total_oda[nonagg & !defense]),
+    #defensive = mean(total_oda[!nonagg & defense]),
+    both = mean(total_oda[nonagg & defense])
+  ) %>%
+  pivot_longer(
+    cols = -year
+  ) %>%
+  ggplot() +
+  aes(
+    year,
+    value,
+    color = name
+  ) +
+  geom_line(size = 1)+
+  geom_point() +
+  geom_vline(
+    xintercept = 2008
+  )
+```
+
+```{r}
+us_dt %>%
+  filter(recipient == 'PAK')%>%
+  select(year, total_oda, nonagg, defense) %>%
+  ggplot() +
+  aes(year, total_oda) +
+  geom_line(size = 0.75) +
+  geom_vline(xintercept = 2008)
+```
+
+
+```{r}
+library(AER)
+library(sandwich)
+library(texreg)
+library(estimatr)
+its <- expand.grid(
+  eqs = 1:length(equations),
+  donors = 1:length(donor_dt)
+)
+fits <- map_dfr(
+  1:nrow(its),
+  ~ {
+    lm_robust(
+      equations[[its$eqs[.x]]],
+      data = donor_dt[[its$donors[.x]]],
+      clusters = dyad,
+      se_type = 'stata'
+    ) %>%
+      tidy() %>%
+      mutate(
+        donor = donor_dt[[its$donors[.x]]]$donor[1]
+      )
+  }
+)
+```
+
+
+```{r}
+fits %>%
+  filter(
+    term %in% c(
+      "atopally",
+      "nonagg",
+      "defense",
+      "neutral",
+      "consul"
+    )
+  ) %>%
+  ggplot() +
+  aes(
+    x = estimate,
+    y = 1,
+    xmin = conf.low,
+    xmax = conf.high,
+    color = term,
+    alpha = ifelse(
+      p.value < 0.05,
+      "p < 0.05", "not sig."
+    )
+  ) +
+  facet_wrap(
+    ~ donor
+  ) +
+  geom_point(
+    position = ggstance::position_dodgev(-.5)
+  ) +
+  geom_errorbarh(
+    position = ggstance::position_dodgev(-.5),
+    height = 0
+  ) +
+  geom_vline(
+    xintercept = 0,
+    lty = 3
+  ) +
+  scale_y_continuous(
+    breaks = NULL
+  ) +
+  labs(
+    x = "Estimate",
+    y = NULL,
+    color = NULL,
+    alpha = NULL
+  )
+```
+
+
+
+
+
+```{r}
+ntrans <- function(x) trans(100 * mean(x))
+dt <- mutate(
+  dt,
+  ot_oda = total_oda - gs_oda - ec_oda - hu_oda,
+  alliance_type = socsci::frcode(
+    nonagg == 0 & defense == 0 & consul == 0 ~ 'None',
+    nonagg == 1 & defense == 0 & consul == 0 ~ 'Nonaggression',
+    nonagg == 0 & defense == 1 & consul == 0 ~ 'Defense',
+    nonagg == 0 & defense == 0 & consul == 1 ~ 'Consult',
+    nonagg == 1 & defense == 1 & consul == 0 ~ 'Nonagg. + Defense',
+    nonagg == 1 & defense == 0 & consul == 1 ~ 'Nonagg. + Consult',
+    nonagg == 0 & defense == 1 & consul == 1 ~ 'Defense + Consult',
+    nonagg == 1 & defense == 1 & consul == 1 ~ 'All'
+  )
+)
+cond <- function(x, val) asinh(100 * mean(ifelse(x==val, 1, 0)))
+dt %>%
+  group_by(
+    recipient,
+    year
+  ) %>%
+  summarize(
+    total_oda = sum(total_oda),
+    gs_oda = sum(gs_oda),
+    ec_oda = sum(ec_oda),
+    hu_oda = sum(hu_oda),
+    ot_oda = sum(ot_oda),
+    atopally = max(atopally),
+    nonagg = cond(alliance_type, 'Nonaggression'),
+    defense = cond(alliance_type, 'Defense'),
+    consul = cond(alliance_type, 'Consult'),
+    nondef = cond(alliance_type, 'Nonagg. + Defense'),
+    noncon = cond(alliance_type, 'Nonagg. + Consult'),
+    defcon = cond(alliance_type, 'Defense + Consult'),
+    all = cond(alliance_type, 'All'),
+    income = max(income),
+    pop = max(pop),
+    disaster = max(disaster),
+    civilwar = max(civilwar),
+    fh_total = max(fh_total),
+    usmil = max(usmil),
+    fdi = sum(fdi),
+    trade = sum(trade)
+  ) -> sm_dt
+
+sm_dt %>%
+  group_by(
+    recipient
+  ) %>%
+  mutate(
+    across(
+      total_oda:ot_oda,
+      ~ lag(.x, order_by = year),
+      .names = 'lag_{.col}'
+    )
+  ) -> sm_dt
+# library(FactoMineR)
+# mfa <- with(
+#   sm_dt,
+#   bind_cols(
+#     trans(income),
+#     trans(pop),
+#     trans(disaster),
+#     civilwar,
+#     fh_total,
+#     trans(usmil),
+#     trans(fdi),
+#     trans(trade)
+#   ) %>%
+#     mutate(
+#       across(
+#         everything(),
+#         ~ (.x - mean(.x)) / sd(.x)
+#       )
+#     ) %>%
+#     MFA(
+#       group = c(5, 3)
+#     )
+# )
+# summary(mfa)
+# sm_dt <- bind_cols(sm_dt, as.data.frame(mfa$ind$coord))
+# stargazer::stargazer(
+#   sm_dt %>%
+#     select(any_atopally:any_consul) %>%
+#     as.data.frame,
+#   type = 'text'
+# )
+# sum(sm_dt$any_neutral)
+# sm_dt %>%
+#   filter(any_neutral==1)
+```
+
+
+
+```{r}
+oda <- c('total_oda', 'gs_oda', 'ec_oda', 'hu_oda', 'ot_oda')
+library(estimatr)
+map(
+  1:length(oda),
+  ~ {
+    the_data <- sm_dt %>% drop_na()
+    the_vars <- names(the_data)
+    names(the_vars) <- the_vars
+    the_vars[oda[.x]] <- 'oda'
+    the_vars[paste0('lag_',oda[.x])] <- 'lag_oda'
+    names(the_data) <- the_vars
+    the_fit <- lm_robust(
+      asinh(oda) ~ atopally + 
+        asinh(income) + asinh(pop) + asinh(disaster) +
+        civilwar + fh_total + 
+        asinh(usmil) + asinh(fdi) + asinh(trade),
+      data = the_data,
+      fixed_effects = ~ recipient,
+      clusters = recipient,
+      se_type = 'stata'
+    )
+    the_fit$outcome <- oda[.x]
+    the_fit
+  }
+) -> the_fits_by_atopally
+map(
+  1:length(oda),
+  ~ {
+    the_data <- sm_dt %>% drop_na()
+    the_vars <- names(the_data)
+    names(the_vars) <- the_vars
+    the_vars[oda[.x]] <- 'oda'
+    the_vars[paste0('lag_',oda[.x])] <- 'lag_oda'
+    names(the_data) <- the_vars
+    the_fit <- lm_robust(
+      trans(oda) ~ nonagg + defense + consul + nondef + noncon + defcon + all +
+        trans(income) + trans(pop) + trans(disaster) +
+        civilwar + fh_total + 
+        trans(usmil) + trans(fdi) + trans(trade) +
+        poly(trans(lag_oda), 3),
+      data = the_data,
+      fixed_effects = ~ recipient,
+      clusters = recipient,
+      se_type = 'stata'
+    )
+    the_fit$outcome <- oda[.x]
+    the_fit
+  }
+) -> the_fits_by_type
+list(
+  the_fits_by_atopally,
+  the_fits_by_type
+) %>%
+  unlist(
+    recursive = F
+  ) -> the_fits
+```
+
+
+```{r}
+the_fits %>%
+  map_dfr(
+    ~ tidy(.x)
+  ) %>%
+  mutate(
+    term = socsci::frcode(
+      term == 'atopally' ~ 'Alliance',
+      term == 'nonagg' ~ 'Nonaggression',
+      term == 'defense' ~ 'Defensive',
+      term == 'consul' ~ 'Consultation',
+      #term == 'nondef' ~ 'Nonagg. + Defense',
+      term == 'noncon' ~ 'Nonagg. + Consult',
+      term == 'defcon' ~ 'Defense + Consult',
+      term == 'all' ~ 'All', 
+      TRUE ~ 'drop'
+    ),
+    outcome = socsci::frcode(
+      outcome == 'total_oda' ~ 'ODA (Total)',
+      outcome == 'gs_oda' ~ 'ODA (Govt + Soc)',
+      outcome == 'ec_oda' ~ 'ODA (Economic)',
+      outcome == 'hu_oda' ~ 'ODA (Humanitarian)',
+      outcome == 'ot_oda' ~ 'ODA (Other)'
+    ),
+    new_estimate = paste(
+      round(estimate, 2),
+      gtools::stars.pval(p.value)
+    )
+  ) %>%
+  filter(
+    term!='drop'
+  ) -> the_fits_summary
+```
+
+
+```{r, fig.height=4, fig.width=8}
+ggplot(the_fits_summary) +
+  aes(
+    x = estimate,
+    xmin = conf.low,
+    xmax = conf.high,
+    y = fct_rev(term)
+  ) +
+  geom_point() +
+  geom_errorbarh(
+    height = 0.15
+  ) +
+  geom_text(
+    aes(
+      label = new_estimate
+    ),
+    vjust = -1
+  ) +
+  geom_vline(
+    xintercept = 0,
+    lty = 3
+  ) +
+  facet_wrap(
+    ~ outcome,
+    nrow = 1
+  ) +
+  labs(
+    x = 'Estimate (95% CIs)',
+    y = NULL
+  ) +
+  theme_light()
+```
+
+
+```{r}
+sm_dt %>%
+  ggplot() +
+  aes(
+    x = year,
+    y = trans(total_oda)
+  ) +
+  geom_line(
+    aes(groups = recipient,
+        color = ifelse(atopally==1, "alliance", "none"))
+  ) 
+```
+
+```{r}
+ggplot(sm_dt) +
+  aes(
+    x = year,
+    y = recipient,
+    fill = ifelse(atopally==1, "alliance", "none")
+  ) +
+  geom_tile() +
+  scale_y_discrete(
+    labels = NULL
+  )
+```
+
+
+```{r}
+library(mgcv)
+gam_fit <- gam(
+  trans(ec_oda) ~ s(trans(n_nonagg)) + recipient + as.factor(year),
+  data = sm_dt
+)
+```
+
+
+
+
+```{r}
+cond <- function(x, val) asinh(100 * mean(ifelse(x==val, 1, 0)))
+dt %>%
+  mutate(
+    defcon = defense * consul
+  ) %>%
+  group_by(
+    donor,
+    year
+  ) %>%
+  summarize(
+    across(
+      c(total_oda:hu_oda, ot_oda),
+      sum
+    ),
+    atopally = mean(atopally),
+    nonagg = cond(alliance_type, 'Nonaggression'),
+    defense = cond(alliance_type, 'Defense'),
+    consul = cond(alliance_type, 'Consult'),
+    nondef = cond(alliance_type, 'Nonagg. + Defense'),
+    noncon = cond(alliance_type, 'Nonagg. + Consult'),
+    defcon = cond(alliance_type, 'Defense + Consult'),
+    all = cond(alliance_type, 'All'),
+    across(
+      c(trade, fdi),
+      sum
+    )
+  ) -> dn_dt
+
+dn_dt %>%
+  group_by(
+    donor
+  ) %>%
+  mutate(
+    across(
+      total_oda:ot_oda,
+      ~ lag(.x, order_by = year),
+      .names = "lag_{.col}"
+    )
+  ) -> dn_dt
+```
+
+
+```{r}
+oda <- c('total_oda', 'gs_oda', 'ec_oda', 'hu_oda', 'ot_oda')
+
+map(
+  1:length(oda),
+  ~ {
+    the_data <- dn_dt %>% drop_na()
+    the_vars <- names(the_data)
+    names(the_vars) <- the_vars
+    the_vars[oda[.x]] <- 'oda'
+    the_vars[paste0("lag_",oda[.x])] <- 'lag_oda'
+    names(the_data) <- the_vars
+    the_fit <- lm_robust(
+      trans(oda) ~ atopally + 
+        trans(fdi) + trans(trade) +
+        poly(trans(lag_oda), 3),
+      data = the_data,
+      fixed_effects = ~ donor,
+      clusters = donor,
+      se_type = 'stata'
+    )
+    the_fit$outcome <- oda[.x]
+    the_fit
+  }
+) -> the_fits_by_atopally
+map(
+  1:length(oda),
+  ~ {
+    the_data <- dn_dt %>% drop_na()
+    the_vars <- names(the_data)
+    names(the_vars) <- the_vars
+    the_vars[oda[.x]] <- 'oda'
+    the_vars[paste0("lag_",oda[.x])] <- 'lag_oda'
+    names(the_data) <- the_vars
+    the_fit <- lm_robust(
+      trans(oda) ~ nonagg + defense + consul + noncon + defcon + all +
+        trans(fdi) + trans(trade) +
+        poly(trans(lag_oda), 3),
+      data = the_data,
+      fixed_effects = ~ donor,
+      clusters = donor,
+      se_type = 'stata'
+    )
+    the_fit$outcome <- oda[.x]
+    the_fit
+  }
+) -> the_fits_by_type
+list(
+  the_fits_by_atopally,
+  the_fits_by_type
+) %>%
+  unlist(
+    recursive = F
+  ) -> the_fits
+```
+
+
+```{r}
+the_fits %>%
+  map_dfr(
+    ~ tidy(.x)
+  ) %>%
+  mutate(
+    term = socsci::frcode(
+      term == 'atopally' ~ 'Alliance',
+      term == 'nonagg' ~ 'Nonaggression',
+      term == 'defense' ~ 'Defensive',
+      term == 'consul' ~ 'Consultation',
+      #term == 'nondef' ~ 'Nonagg. + Defense',
+      term == 'noncon' ~ 'Nonagg. + Consult',
+      term == 'defcon' ~ 'Defense + Consult',
+      term == 'all' ~ 'All', 
+      TRUE ~ 'drop'
+    ),
+    outcome = socsci::frcode(
+      outcome == 'total_oda' ~ 'ODA (Total)',
+      outcome == 'gs_oda' ~ 'ODA (Govt + Soc)',
+      outcome == 'ec_oda' ~ 'ODA (Economic)',
+      outcome == 'hu_oda' ~ 'ODA (Humanitarian)',
+      outcome == 'ot_oda' ~ 'ODA (Other)'
+    ),
+    new_estimate = paste(
+      round(estimate, 2),
+      gtools::stars.pval(p.value)
+    )
+  ) %>%
+  filter(
+    term!='drop'
+  ) -> the_fits_summary
+```
+
+
+```{r, fig.height=3.75, fig.width=8}
+ggplot(the_fits_summary) +
+  aes(
+    x = estimate,
+    xmin = conf.low,
+    xmax = conf.high,
+    y = fct_rev(term)
+  ) +
+  geom_point() +
+  geom_errorbarh(
+    height = 0.15
+  ) +
+  geom_text(
+    aes(
+      label = new_estimate
+    ),
+    vjust = -1
+  ) +
+  geom_vline(
+    xintercept = 0,
+    lty = 3
+  ) +
+  facet_wrap(
+    ~ outcome,
+    nrow = 1
+  ) +
+  labs(
+    x = 'Estimate (95% CIs)',
+    y = NULL
+  ) +
+  theme_light()
+```
+
+
+```{r}
+dt %>%
+  group_by(
+    dyad
+  ) %>%
+  mutate(
+    across(
+      c(total_oda:hu_oda, ot_oda),
+      ~ lag(.x, order_by = year),
+      .names = "lag_{.col}"
+    )
+  ) %>%
+  ungroup -> dt
+```
+
+
+
+```{r}
+oda <- c('total_oda', 'gs_oda', 'ec_oda', 'hu_oda', 'ot_oda')
+
+map(
+  1:length(oda),
+  ~ {
+    the_data <- dt %>% drop_na()
+    the_vars <- names(the_data)
+    names(the_vars) <- the_vars
+    the_vars[oda[.x]] <- 'oda'
+    the_vars[paste0("lag_",oda[.x])] <- 'lag_oda'
+    names(the_data) <- the_vars
+    the_fit <- lm_robust(
+      trans(oda) ~ I(asymm - 1) * atopally + 
+        trans(income) + trans(pop) + trans(disaster) + 
+        civilwar + fh_total + trans(usmil) +
+        trans(fdi) + trans(trade) +
+        poly(trans(lag_oda), 3),
+      data = the_data,
+      fixed_effects = ~ dyad,
+      clusters = donor,
+      se_type = 'stata'
+    )
+    the_fit$outcome <- oda[.x]
+    the_fit
+  }
+) -> the_fits_by_atopally
+map(
+  1:length(oda),
+  ~ {
+    the_data <- dt %>% drop_na()
+    the_vars <- names(the_data)
+    names(the_vars) <- the_vars
+    the_vars[oda[.x]] <- 'oda'
+    the_vars[paste0("lag_",oda[.x])] <- 'lag_oda'
+    names(the_data) <- the_vars
+    the_fit <- lm_robust(
+      trans(oda) ~ I(asymm - 1) * alliance_type +
+        trans(income) + trans(pop) + trans(disaster) + 
+        civilwar + fh_total + trans(usmil) +
+        trans(fdi) + trans(trade) +
+        poly(trans(lag_oda), 3),
+      data = the_data,
+      fixed_effects = ~ dyad,
+      clusters = donor,
+      se_type = 'stata'
+    )
+    the_fit$outcome <- oda[.x]
+    the_fit
+  }
+) -> the_fits_by_type
+list(
+  the_fits_by_atopally,
+  the_fits_by_type
+) %>%
+  unlist(
+    recursive = F
+  ) -> the_fits
+```
+
+
+```{r}
+the_fits %>%
+  map_dfr(
+    ~ tidy(.x)
+  ) %>%
+  mutate(
+    term = socsci::frcode(
+      term == 'atopally' ~ 'Alliance',
+      term == 'alliance_typeNonaggression' ~ 'Nonaggression',
+      term == 'alliance_typeDefense' ~ 'Defensive',
+      term == 'alliance_typeConsult' ~ 'Consult',
+      term == 'alliance_typeNonagg. + Consult' ~ 'Nonagg. + Consult',
+      term == 'alliance_typeDefense + Consult' ~ 'Defense + Consult',
+      term == 'alliance_typeAll' ~ 'All',
+      #term == 'neutral' ~ 'Neutrality',
+      TRUE ~ 'drop'
+    ),
+    outcome = socsci::frcode(
+      outcome == 'total_oda' ~ 'ODA (Total)',
+      outcome == 'gs_oda' ~ 'ODA (Govt + Soc)',
+      outcome == 'ec_oda' ~ 'ODA (Economic)',
+      outcome == 'hu_oda' ~ 'ODA (Humanitarian)',
+      outcome == 'ot_oda' ~ 'ODA (Other)'
+    ),
+    new_estimate = paste(
+      round(estimate, 2),
+      gtools::stars.pval(p.value)
+    )
+  ) %>%
+  filter(
+    term!='drop'
+  ) -> the_fits_summary
+```
+
+
+```{r, fig.height=3.75, fig.width=8}
+ggplot(the_fits_summary) +
+  aes(
+    x = estimate,
+    xmin = conf.low,
+    xmax = conf.high,
+    y = fct_rev(term)
+  ) +
+  geom_point() +
+  geom_errorbarh(
+    height = 0.15
+  ) +
+  geom_text(
+    aes(
+      label = new_estimate
+    ),
+    vjust = -1
+  ) +
+  geom_vline(
+    xintercept = 0,
+    lty = 3
+  ) +
+  facet_wrap(
+    ~ outcome,
+    nrow = 1
+  ) +
+  labs(
+    x = 'Estimate (95% CIs)',
+    y = NULL
+  ) +
+  theme_light()
+```
+
+
+
+
+
+
