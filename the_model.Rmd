@@ -1,0 +1,184 @@
+---
+title: "Untitled"
+author: "Miles D. Williams"
+date: '2022-07-28'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The theoretical model that follows is a highly stylized and simplified characterization of the interactions that take place between industrialized and developing country governments. This simplicity is useful because it helps to draw a sharp analytical distinction between two kinds of alliance characteristics and their implications for resource transfers between industrialized and developing countries. The model further helps to demonstrate how aid delivery strategies can be differently affected by alliance promises. In particular, the model underscores that aid that is delivered in such a way that ensures it is earmarked explicitly for development, or the production of public goods, can also help to reduce opportunity costs related to non-development aid-for-policy exchanges. Thus, contrary to the conventional view on aid delivery tactics and donor motives, both more fungible government-to-government aid transfers and less fungible aid transfers that bypass the recipient government and go to NGOs or multilateral organizations to ensure aid supports donors' development objectives can serve as complementary components of aid-for-policy deals.
+
+
+## The Setup
+
+Building on a framework loosely based on Bermeo (2018), we can model development and non-development interactions between an industrialized country $i$ and a developing country $x$. In this framework, country $i$ has a fixed resource constraint $R_i \in \mathbb{R}_+$ with which it can do one of three things:
+
+1. Promote the production of public goods (i.e., development) in developing country $x$;
+2. Supplement the discretionary spending of $x$ on private goods (i.e., non-development projects);
+3. Support numeraire consumption (i.e., all other foreign and domestic policy objectives that $i$ would like to promote).
+
+Option 1 represents outcomes that are supported by aid from $i$ that are specifically earmarked for development. Option 2 captures recipient outcomes that follow from the provision of fungible aid from $i$ that $x$ may use for whatever non-development purposes it wishes. The final objective characterizes the opportunity cost of increasing aid giving in $x$ that $i$ experiences---the more $i$ spends on aid, the more this comes at the expense of other goals.
+
+The developing country $x$ is further endowed with resources $R_x \in \mathbb{R}_+$ with which it may accomplish a more limited set of goals. Namely: supporting discretionary spending on various foreign and domestic objectives not related to development. By imposing at the outset that $x$ does not use its resources to promote development, the goal here is not to suggest that $x$ does not derive utility from it. To the contrary, it does. This feature of the model is only intended to bring into sharp relief the idea that $x$ is at a disadvantage in supporting its own development and therefore is dependent on $i$ to effectively realize higher levels of development.
+
+Utility for $i$ is expressed as follows:
+$$u_i = d(r_i) + v_i(R_i - r_i - f_i) + \mu(M_x), \tag{1}$$
+and utility for $x$ is expressed as
+$$u_x = d(r_i) + v_x(R_x + f_i) - \kappa (M_x). \tag{2}$$
+
+The expression $d(r_i)$ captures the utility both $i$ and $x$ derive from development where $d(\cdot)$ is a production function that is monotonically increasing with resources $r_i \geqslant 0$ from $i$. As is the convention with such production functions, $d(\cdot)$ is assumed to yield diminishing returns to resources.^[That is, $\partial d/\partial r_i > 0$ and $\partial^2 d/\partial r_i^2 < 0$.] The expression $v_i(R_i - r_i - f_i)$ captures the utility $i$ receives from promoting a numeraire basket of foreign and domestic policy objectives. This function, too, is presumed to be increasing in $R_i - r_i - f_i$ with diminishing returns. The same holds for the function $v_x(R_x + f_i)$ in $x$'s utility function. At this point, it will be convenient to specify that given some variable $y > 0$, $\partial v_{i(x)} / \partial y \gg \partial d/\partial y$, which is to say that for any given value of $y$ the marginal utility of discretionary foreign and domestic spending for both $i$ and $x$ are presumed to be greater than the marginal utility of development. This assumption befits the observed reality of aid allocation---namely that even the most generous donors commit only a fraction of their total budgets toward foreign aid.
+
+The function $\mu(\cdot)$ captures utility that $i$ receives from a non-development policy concessions from $x$. This may be many things, but for the purposes of this study suppose that $\mu(\cdot)$ captures the benefit that $i$ receives from getting $x$ to commit to an alliance. The input $M_x \in \{0, 1\}$ and captures whether $x$ provides $i$ with a concession (that is, whether it will agree to sign an alliance). If $x$ does not provide a concession, $M_x = 0$ and thus $\mu(M_x = 0) = 0$. Conversely, if $x$ offers a concession, $M_x = 1$ and $\mu(M_x = 1) > 0$.
+
+The function $\kappa(\cdot)$ captures the opportunity cost that $x$ experiences from providing a policy concession. By signing an alliance, $x$ may forego other objectives that matter to its government. If $M_x = 0$ then $\kappa(M_x = 0) = 0$. Further, if $M_x = 1$ then $\kappa(M_x = 1) > 0$.
+
+As $i$ and $x$ interact, $i$ may offer resources (aid) to $x$ in one of two ways. The first is through the supply of development resources $r_i$. As already described above, these resources are a direct input to $d(\cdot)$ and thus are used expressly for the purpose of producing public goods in $x$. It is presumed that these public goods add to the development of both $i$ and $x$. The industrialized country's government may see value in promoting development either for altruistic reasons or for self-interested reasons---for example, greater development in $x$ can minimize unwanted transnational spillovers of negative externalities (illicit drugs, human trafficking, disease, refugees, etc.) that result from problems rooted in underdevelopment (civil war, poverty, famine, discontent, etc.).^[See Bermeo (2017, 2018).]
+
+The second way $i$ may offer $x$ resources is via a no-strings-attached (fungible) transfer $f_i$. This transfer enters $x$'s utility function in $v_x(R_x + f_i)$ to capture the idea that this aid is not explicitly directed toward promoting development in $x$ but rather supplements $x$'s discretionary spending. This transfer comes at the cost of some share of $i$'s own discretionary budget. Hence, it enters $i$'s utility function in $v_i(R_i - r_i - f_i)$.
+
+If $f_i$ only costs $i$ resources, why would $i$ offer $x$ a no-strings-attached transfer? The reason is that $x$ is in a position to demand compensation for providing $i$ with a non-development policy concession. If offered, this concession adds to $i$'s utility by $\mu(M_x = 1)$ but subtracts from $x$'s utility by $\kappa(M_x = 1)$. The offer of fungible aid gives $i$ two alternative channels through which to augment $x$'s utility and thus to make an aid-for-policy deal incentive compatible. The industrialized country, thus, can "pay" for a policy deal by either increasing development resources, non-strings-attached transfers, or both.
+
+
+## Aid-for-Alliance Exchanges
+
+In deriving best-responses, it will be helpful to proceed by first considering a world where no policy deals are struck between $i$ and $x$. This will establish a baseline set of outcomes against which policy deals can then be added. Since such policy deals reflect a discrete choice (they are offered by $x$ or they are not), it follows that the offer and acceptance of such deals will be determined by how actors evaluate their utility in the presence or absence of a deal. The utility that actors receive in a non-deal equilibrium will be the point of reference for the utility of making a policy concession.
+
+
+### Case 1: Development Interactions
+
+In a world where no policy deal is made between $i$ and $x$ the equilibrium supply can be identified by exclusively optimizing utility for $i$. With no policy deal, $i$'s utility simplifies to
+$$u_i = d(r_i) + v_i(R_i - r_i - f_i), \tag{3}$$
+where $f_i = 0$ since the transfer provides no material benefit to $i$. 
+
+Framed as an unconstrained optimization problem, $i$'s utility maximization problem is
+$$\max_{r_i \geqslant 0} \space \space d(r_i) + v_i(R_i - r_i), \tag{4}$$
+where the first-order conditions for a maximizer $r_i^*$ are
+$$\partial d /\partial r_i - \partial v_i / \partial r_i = 0. \tag{5}$$
+
+With the maximizing value $r_i^*$, it is possible to establish baseline utility for both $i$ and $x$ absent a policy deal:
+$$
+\begin{aligned}
+u_i^* & = d(r_i^*) + v_i(R_i - r_i^*), \\
+u_x^* & = d(r_i^*) + v_x(R_x). 
+\end{aligned} \tag{6}
+$$
+
+
+### Case 2: Buying Alliance Commitments
+
+With utility for $i$ and $x$ absent a policy deal established, it is now possible to characterize the incentive compatibility constraints for each actor such that a policy deal is offered by $x$ and accepted $i$.
+
+First, for $i$ to be willing to offer compensation to $x$ in exchange for a concession, it must be the case that the value of the concession is such that $i$ is at least as well off or better with than without the deal. The full aid package that $i$ provides $x$ if there is a deal is $\tilde r_i + f_i$ and without a deal is $r_i^*$. Purchasing a policy deal is incentive compatible for $i$ as long as:
+$$\mu(M_i = 1) \geqslant \overbrace{v_i(R_i - r_i^*) - v_i(R_i - \tilde r_i - f_i)}^{\Delta \text{ in numeraire consumption}} + \overbrace{d(r_i^*) - d(\tilde r_i)}^{\Delta \text{ in development}}. \tag{7}$$
+From the above, it is clear that for a deal to be incentive compatible for $i$, the value of the deal must offset the loss to $i$'s utility from $v_i(\cdot)$ and any change to $i$'s utility from shifts to development that might be necessary to support a policy deal. It is possible, for example, that $\tilde r_i < r_i^*$, in which case this part of the expression will be negative. However, it is also possible that $\tilde r_i > r_i^*$, making this part of the expression positive.
+
+Country $i$'s goal will be to minimize the right-hand side of the above inequality subject to satisfying country $x$'s incentive compatibility constraint:
+$$\overbrace{v_x(R_x + f_i) - v_x(R_x)}^{\Delta \text{ in numeraire consumption}} + \overbrace{d(\tilde r_i) - d(r_i^*)}^{\Delta \text{ in development}} \geqslant \kappa(M_x = 1). \tag{8}$$
+If the increase to $v_x(\cdot)$ and any chance to development are enough to offset the cost of providing a deal, then $x$ will be willing to provide $i$ with a concession. 
+
+With complete information, $i$ will provide $x$ with an aid package such that the left-hand side of the inequality in (8) will equal $\kappa (M_x = 1)$. While a closed form solution for what an equilibrium transfer would look like does not exist, it is possible to analyze some of the characteristics that this transfer may possess.
+
+#### Proposition 1
+
+*The industrialized country can use both development and no-strings-attached transfers to compensate for the opportunity cost of an aid-for-policy deal.*
+
+##### Proof
+
+\hrulefill
+
+From inequality (8) we note that for any development transfer $\tilde r_i > r_i^*$ it follows that $d(\tilde r_i) > d(r_i^*)$ from the monotonicity of $d$. Hence, any increase in development resources necessarily increases the level of development production in $x$ and thus increases $x$'s utility by $d(\tilde r_i) - d(r_i^*) > 0$.
+
+Further, for any fungible transfer $f_i > 0$, it follows that $v_x(R_x + f_i) > v_x(R_x)$ from the monotonicity of $v_x$. Hence, an positive no-strings attached transfer necessarily increases $x$'s discretionary budget and thus increases the promotion of $x$'s various non-development foreign and domestic policy goals by $v_x(R_x + f_i) - v_x(R_x) > 0$.
+
+\hfill Q.E.D.
+
+\hrulefill
+
+While this proposition is intuitive, it highlights an important reality of aid-for-policy exchange. While the conventional view draws a contrast between the development and non-development goals of aid donors, the model shows that these two goals are deeply interconnected and that aid that is expressly targeted toward development can, as a byproduct, support the purchase of non-development policy deals.
+
+#### Proposition 2
+
+*For an aid-for-policy exchange to be incentive compatible, one of the following conditions must be met:*
+
+1. $\tilde r_i \leqslant r_i^*$ and $f_i > 0$;
+2. $\tilde r_i > r_i^*$ and $f_i \geqslant 0$.
+
+
+##### Proof 
+
+\hrulefill
+
+The proof proceeds by contradiction. Suppose this proposition is not true---suppose that if condition 1 is not met then 2 is not necessary.
+
+For an aid-for-policy exchange to be incentive compatible, it must be the case that $i$ makes $x$ an offer such that the increase in its utility from discretionary spending and/or development is enough to offset the opportunity cost of conceding to a policy concession. At minimum, this implies that
+$$v_x(R_x + f_i) - v_x(R_x) + d(\tilde r_i) - d(r_i^*) > 0. \tag{9}$$
+If condition 1 is not met, can the inequality hold if condition 2 is not also met?
+
+Let $\tilde r_i \leqslant r_i^*$ and $f_i = 0$. This would imply that (9) reduces to 
+$$
+\begin{aligned}
+v_x(R_x + 0) - v_x(R_x) + d(\tilde r_i) - d(r_i^*) & > 0 \\
+d(\tilde r_i) & > d(r_i^*).
+\end{aligned} \tag{10}
+$$
+Because $d(\cdot)$ is monotonic it follows that $d(\tilde r_i) > d(r_i^*) \iff \tilde r_i > r_i^*$. This contradicts the assertion that $\tilde r_i \leqslant r_i^*$ and $f_i = 0$ can support incentive compatibility. Therefore, it must be the case that if condition 1 does not hold, condition 2 must.
+
+By *modus tollens*, it thus follows that if condition 2 is not met, then by necessity condition 1 must hold if incentive compatibility is to be supported.
+
+\hfill Q.E.D.
+
+\hrulefill
+
+This proposition helps to solidify the point that an aid-for-policy exchange (or for our purposes, aid-for-alliance exchange) can only be supported if $i$ offers $x$ a policy deal in the form of increased aid spending in the form of a no-strings-attached transfer, an increase to development funding, or both. 
+
+Most important to note here is that promoting increased levels of development can be part of a policy deal between $i$ and $x$. However, what is even more interesting is the fact that promoting development is less costly a way of satisfying incentive compatibility than a no-strings-attached transfer.
+
+#### Proposition 3
+
+*The cost to an industrialized country for increasing resources earmarked for development is less than the cost to increasing fungible aid to support an aid-for-alliance exchange.*
+
+##### Proof
+
+\hrulefill
+
+The marginal effects of $r_i$ and $f_i$ on $i$'s utility are, respectively:
+$$
+\begin{aligned}
+\partial u_i / \partial r_i & = d'(r_i) - v_i'(R_i - r_i - f_i), \\
+\partial u_i / \partial f_i & = -v_i'(R_i - r_i - f_i).
+\end{aligned} \tag{11}
+$$
+Given that $d'(r_i) > 0$ for all $r_i > 0$, while $-v'_i(R_i - r_i - f_i) < 0$ for all $r_i > 0$ and $f_i > 0$, it follows that the cost of increasing $r_i$ is less than the cost of $f_i$:
+$$
+\begin{aligned}
+d'(r_i) - v_i'(R_i - r_i - f_i) & > - v_i'(R_i - r_i - f_i), \\
+d'(r_i) & > v_i'(R_i - r_i - f_i) - v_i'(R_i - r_i - f_i), \\
+d'(r_i) & > 0.
+\end{aligned}\tag{12}
+$$
+
+\hfill Q.E.D.
+
+\hrulefill
+
+### Case 3: Selling Alliance Commitments
+
+The above case showed clearly that if an industrialized country seeks to buy alliance commitments from developing countries, the former will have to offer compensation via one of two pathways (or both). Either, $i$ can offer $x$ a no-strings-attached transfer $f_i > 0$, or offer to increase resources specifically earmarked for development $\tilde r_i > r_i^*$, or a mix of the two. What is most surprising in the political economy of such exchanges is that $i$'s efforts to promote development are inextricably linked to its efforts to provide $x$ with compensation for a political concession. 
+
+However, this set-up captures only one of the ways that alliance promises may be relevant within the political economy of aid-for-alliance exchange. As noted earlier, alliance commitments need not only reflect a concession on the part of developing countries. Some can represent commitments from industrialized countries. To model this, we can augment the utilities of $i$ and $x$ so that $i$ has the option to provide $x$ with an alliance commitment that costs it $D_i > 0$ resources and that acts as a positive externality to $x$ such that $\delta (D_i) > 0$.
+
+Utility for $i$ is expressed as follows:
+$$u_i = d(r_i) + v_i(R_i - r_i - f_i - D_i) + \mu(M_x), \tag{13}$$
+and utility for $x$ is expressed as
+$$u_x = d(r_i) + v_x(R_x + f_i) + \delta(D_i) - \kappa (M_x). \tag{14}$$
+
+While it is clear that if $D_i > 0$, country $x$ benefits, why would $i$ want to offer $x$ such a commitment? It costs $i$ resources and, at least when observing the utilities of $i$ and $x$, there is no direct concession that $i$ receives from $x$ in exchange for the offer.
+
+We can see, however, where the incentive for such an alliance promise comes from by examining how the offer from $i$ augments $x$'s incentive compatibility constraint for an existing aid-for-policy exchange. Suppose a deal has already been struck between $i$ and $x$ ($M_x = 1$), but that $x$ is willing to accept certain alliance promises in lieu of a some share of a resource transfer. The conditions for an existing deal to remain incentive compatible for $x$ are now:
+$$\overbrace{v_x(R_x + \dot f_i) - v_x(R_x)}^{\Delta \text{ in numeraire consumption}} + \overbrace{d(\dot r_i) - d(r_i^*)}^{\Delta \text{ in development}} \geqslant \kappa (M_x = 1) - \delta(D_i).\tag{15}$$
+In this inequality, as opposed to (8), we see new values of fungible and development resources enter the left-hand side. While $\dot f_i$ captures no-strings-attached transfers in the presence of $D_i > 0$, $\dot r_i$ captures development resources in the presence of the same. How does $D_i$ shift the equilibrium exchange between $i$ and $x$?
+
+The answer to this question is intuitive. The offer of $D_i$ reduces the opportunity cost associated with an existing deal between $i$ and $x$. This therefore implies that the total change to $x$'s utility relative to its utility absent an existing deal required to make a deal incentive compatible declines. This thus implies that the offer $D_i$ can substitute for some amount of $f_i$ or $\tilde r_i$ that would have otherwise been required to support a policy deal.

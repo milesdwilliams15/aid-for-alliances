@@ -21,7 +21,7 @@ re_scale <- function(x) (x - mean(x, na.rm=T)) / sd(x, na.rm=T)
 
 # data --------------------------------------------------------------------
 
-dt <- read_csv(
+dt <- read.csv(
   here("01_data/cleaned_data.csv")
 )
 dt <- dt %>%
@@ -44,7 +44,7 @@ dt <- dt %>% # lag alliance variables and covariates
       c(defense, nonagg, income, pop, fh_total, trade, fdi, usmil),
       ~ lag(.x, order_by = year)
     )
-  )
+  ) %>% drop_na(defense)
 
 # estimate models ---------------------------------------------------------
 
@@ -143,7 +143,7 @@ main_tme_fits <- main_forms %>%
 
 
 ## Via Mixed Effects Logit ----
-main_lme_fits <- bi_forms %>%
+main_lme_fits <- bi_forms[1:5] %>%
   map(
     ~ gam(
       update(.x, ~ . + donor + poly(year, 3) + s(id, bs = 're')),
@@ -162,6 +162,39 @@ main_lme_fits <- bi_forms %>%
 #     )
 #  )
 
+## Via PPML ----
+
+ppml <- function(..., clusters = NULL) {
+  fit <- glm(..., family = quasipoisson)
+  if(is.null(clusters)) {
+    vcv <- sandwich::vcovHC(fit, type = 'HC0')
+  } else {
+    vcv <- sandwich::vcovCL(fit, clusters = clusters)
+  }
+  return(
+    list(
+      fit = fit,
+      vcv = vcv
+    )
+  )
+}
+main_ppml_fits <- list(
+  update(base_form, total_oda ~ .),
+  update(base_form, gov_oda ~ .),
+  update(base_form, total_oda - gov_oda ~ .),
+  update(base_form, ngo_oda ~ .),
+  # update(base_form, asinh(ppp_oda) ~ .), # no public private partnerships
+  update(base_form, mlt_oda ~ .),
+  update(base_form, trt_oda ~ .),
+  update(base_form, otr_oda ~ .)
+) %>%
+  map(
+    ~ ppml(
+      update(.x, ~ . + donor + poly(year, 3)),
+      data = dt,
+      clusters = dt$dyad
+    )
+  )
 
 # estimate logged-proportional odds model via mixed effects logit
 
@@ -281,14 +314,26 @@ tidy_fits3 <- main_lme_fits %>%
   ) %>%
   filter(
     term %in% c('nonagg', 'defense')
+  ) 
+tidy_fits4 <- main_ppml_fits %>%
+  map_dfr(
+    ~ coeftest(.x$fit, vcov. = .x$vcv) %>%
+      estimatr::tidy()
   ) %>%
-  mutate(
-    ODA = rep(
-      model_names,
-      each = 2
-    ),
-    method = 'Logit (Dyadic MEs)'
+  filter(
+    term %in% c('nonagg', 'defense')
   )
+tidy_fits3$ODA <- rep(model_names[1:5], each = 2)
+tidy_fits3$method <- "Logit (Dyadic MEs)"
+tidy_fits4$ODA <- rep(model_names, each = 2)
+tidy_fits4$method <- "PPML (Robust SEs)"
+  # mutate(
+  #   ODA = rep(
+  #     model_names,
+  #     each = 2
+  #   ),
+  #   method = 'Logit (Dyadic MEs)'
+  # )
 tidy_fits <- bind_rows(tidy_fits1, tidy_fits2)
 
 
@@ -376,7 +421,174 @@ ggsave(
     height = 3,
     width = 10
   )
-  
+
+p1 <- tidy_fits4 %>%
+  filter(ODA=='Total') %>%
+  ggplot() +
+  aes(
+    x = estimate,
+    xmin = estimate - 1.96 * std.error,
+    xmax = estimate + 1.96 * std.error,
+    y = term,
+    label = round(estimate, 2)
+  ) +
+  geom_point() +
+  geom_errorbarh(
+    height = 0
+  ) +
+  geom_text(
+    vjust = -1
+  ) +
+  geom_vline(
+    xintercept = 0,
+    lty = 2
+  ) +
+  scale_y_discrete(
+    labels = c(
+      'Defense',
+      'Nonaggression'
+    )
+  ) +
+  labs(
+    x = 'Estimate with 95% CI',
+    y = NULL,
+    title = 'Total ODA'
+  ) +
+  theme_light()
+
+p2 <- ggplot(tidy_fits4 %>%
+               filter(ODA %in% c('Gov-to-Gov', 'Bypass'))) +
+  aes(
+    x = estimate,
+    xmin = estimate - 1.96 * std.error,
+    xmax = estimate + 1.96 * std.error,
+    y = term,
+    color = ODA,
+    label = round(estimate, 2)
+  ) +
+  geom_point(
+    position = ggstance::position_dodgev(-.5)
+  ) +
+  geom_errorbarh(
+    position = ggstance::position_dodgev(-.5),
+    height = 0
+  ) +
+  geom_text(
+    show.legend = F,
+    vjust = -1,
+    position = ggstance::position_dodgev(-.5)
+  ) +
+  geom_vline(
+    xintercept = 0,
+    lty = 2
+  ) +
+  labs(
+    x = 'Estimate with 95% CIs',
+    y = NULL,
+    color = 'Channel',
+    title = 'ODA by delivery channel'
+  ) +
+  scale_y_discrete(
+    labels = c('Defense', 'Nonaggression')
+  ) +
+  theme_light() +
+  theme(
+    legend.position = c(0.2,0.7),
+    legend.background = element_rect(
+      color = 'black'
+    )
+  )
+p1 + p2
+ggsave(
+  here("03_figures/main_ppml_effects.png"),
+  dpi = 1200,
+  height = 3,
+  width = 10
+)
+
+p1 <- tidy_fits3 %>%
+  filter(ODA=='Total') %>%
+  ggplot() +
+  aes(
+    x = estimate,
+    xmin = estimate - 1.96 * std.error,
+    xmax = estimate + 1.96 * std.error,
+    y = term,
+    label = round(estimate, 2)
+  ) +
+  geom_point() +
+  geom_errorbarh(
+    height = 0
+  ) +
+  geom_text(
+    vjust = -1
+  ) +
+  geom_vline(
+    xintercept = 0,
+    lty = 2
+  ) +
+  scale_y_discrete(
+    labels = c(
+      'Defense',
+      'Nonaggression'
+    )
+  ) +
+  labs(
+    x = 'Estimate with 95% CI',
+    y = NULL,
+    title = 'Total ODA'
+  ) +
+  theme_light()
+
+p2 <- ggplot(tidy_fits3 %>%
+               filter(ODA %in% c('Gov-to-Gov', 'Bypass'))) +
+  aes(
+    x = estimate,
+    xmin = estimate - 1.96 * std.error,
+    xmax = estimate + 1.96 * std.error,
+    y = term,
+    color = ODA,
+    label = round(estimate, 2)
+  ) +
+  geom_point(
+    position = ggstance::position_dodgev(-.5)
+  ) +
+  geom_errorbarh(
+    position = ggstance::position_dodgev(-.5),
+    height = 0
+  ) +
+  geom_text(
+    show.legend = F,
+    vjust = -1,
+    position = ggstance::position_dodgev(-.5)
+  ) +
+  geom_vline(
+    xintercept = 0,
+    lty = 2
+  ) +
+  labs(
+    x = 'Estimate with 95% CIs',
+    y = NULL,
+    color = 'Channel',
+    title = 'ODA by delivery channel'
+  ) +
+  scale_y_discrete(
+    labels = c('Defense', 'Nonaggression')
+  ) +
+  theme_light() +
+  theme(
+    legend.position = c(0.2,0.7),
+    legend.background = element_rect(
+      color = 'black'
+    )
+  )
+p1 + p2
+ggsave(
+  here("03_figures/main_logit_effects.png"),
+  dpi = 1200,
+  height = 3,
+  width = 10
+)
 
 `%nin%` <- Negate(`%in%`)
 p1 <- ggplot(tidy_fits1 %>%
@@ -475,3 +687,74 @@ save(
   file = here("04_regression_output/main_lme_fits.R")
 )
 
+
+
+
+# compare the us and china ------------------------------------------------
+
+# pull out only USA obs.
+usa_dt <- dt %>%
+  filter(donor == 'USA')
+prc_dt <- read_csv(
+  here('01_data/final_china_data_imputed.csv')
+) 
+prc_dt %>%
+  filter(
+    year %in% unique(usa_dt$year)
+  ) -> prc_dt
+# incorporate chinese treaty data
+atop <- read_csv(
+  here("01_data/atop_dyad_year.csv")
+)
+atop <- # need to recover individual country cow codes
+  atop %>%
+  separate(
+    ddyad,
+    into = c('donor', 'recipient'),
+    sep = -3
+  ) %>%
+  mutate(
+    donor = countrycode::countrycode(
+      as.numeric(donor), "cown", "iso3c"
+    ),
+    recipient = countrycode::countrycode(
+      as.numeric(recipient), "cown", "iso3c"
+    )
+  ) %>%
+  select(
+    donor, recipient, year,
+    atopally:consul, asymm
+  )
+atop <- atop %>%
+  filter(donor == 'CHN') %>%
+  select(-donor)
+prc_dt <- prc_dt %>%
+  left_join(
+    atop, by = c('recipient_iso3' = 'recipient', 'year')
+  )
+prc_dt <- prc_dt %>%
+  mutate(
+    across(defense:consul, ~ ifelse(is.na(.x), 0, .x)),
+  )
+
+# us equation
+usa_eq <- ~ nonagg + defense +
+  asinh(income) + asinh(pop) + asinh(disaster) +
+  civilwar + fh_total + asinh(dist) + asinh(trade) +
+  asinh(fdi) + asinh(usmil) + colony
+prc_eq <- ~ nonagg + defense +
+  v2x_api + asinh(gdp / pop) + asinh(pop) +
+  asinh(disaster) + civilwar + asinh(imports + exports) +
+  asinh(mil_visits)
+usa_tobit <- censReg(
+  update(usa_eq, asinh(total_oda) ~ .), 
+  data = plm::pdata.frame(usa_dt, index = 'recipient'),
+  method = 'BHHH'
+)
+prc_tobit <- censReg(
+  update(prc_eq, asinh(debt) ~ .),
+  data = plm::pdata.frame(prc_dt, index = 'recipient_iso3'),
+  method = 'BHHH'
+)
+summary(usa_tobit)
+summary(prc_tobit)

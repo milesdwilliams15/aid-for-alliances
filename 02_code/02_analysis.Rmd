@@ -10,13 +10,14 @@ knitr::opts_chunk$set(echo = TRUE,
                       message = FALSE,
                       warning = FALSE)
 library(tidyverse)
+library(here)
 library(corrr)
 ```
 
 
 ```{r}
-dt <- read_csv(
-  "../01_data/cleaned_data.csv"
+dt <- read.csv(
+  here("01_data/cleaned_data.csv")
 )
 ```
 
@@ -35,6 +36,53 @@ dt %>%
 
 
 ## Some Stylized Facts
+
+
+### Alliances over time
+
+```{r}
+dt %>% filter(donor == 'USA') %>%
+  group_by(
+    atopally, year
+  ) %>%
+  summarize(
+    oda = median(total_oda)
+  ) %>%
+  ggplot() +
+  aes(
+    year, oda, color = as.factor(atopally)
+  ) +
+  geom_line()
+dt %>% filter(donor == 'USA') %>%
+  group_by(
+    defense, nonagg, year
+  ) %>%
+  summarize(
+    oda = median(total_oda)
+  ) %>%
+  mutate(
+    alliance = case_when(
+      defense & !nonagg ~ 'Defense',
+      !defense & nonagg ~ 'Nonaggression',
+      defense & nonagg ~ 'Both',
+      TRUE ~ 'None'
+    )
+  ) %>%
+  ggplot() +
+  aes(
+    x = year,
+    y = oda,
+    color = alliance
+  ) +
+  geom_line()
+```
+
+```{r}
+dt %>% filter(donor == 'USA', defense == 1)%>%
+  select(donor, recipient, year, defense:consul) %>%
+  arrange(recipient)
+```
+
 
 ```{r}
 dt %>%
