@@ -29,7 +29,8 @@ knitr::opts_chunk$set(echo = F,
                       warning = F,
                       message = F,
                       out.width = '100%',
-                      fig.align = 'center')
+                      fig.align = 'center',
+                      fig.pos = "!t")
 ```
 
 # Introduction
@@ -94,7 +95,7 @@ However, on this front, again, theoretical advances suggest this tidy division o
 
 Taken together, the recent developments in both the alliance and foreign aid literatures suggest there is ample room, and need, for refining the conventional wisdom on aid as an alliance-building tool and for leveraging data on alliance types and aid channels to place the aid-for-alliance perspective on firmer empirical footing. The task of updating the theory is taken up in the following section.
 
-# The Logic of Alliances and Exchange in the Political Economy of Aid
+# An Aid-for-Alliance Exchange Framework
 
 ## An Updated Logic of Alliance Commitments
 
@@ -146,7 +147,7 @@ This setup should appear quite similar to the conventional logic of aid-for-alli
 
 Extending this framework to the broader perspective on aid-for-alliance exchange proposed here, the implication of the Bermeo (2018) model is that both public and bypass aid channels should be sensitive to alliance dynamics. When alliance promises reflect commitments from developing countries to industrialized countries, donor governments can provide compensation by subsidizing the recipient country's budget *and* by promoting public goods with aid that bypasses the recipient government. Conversely, when alliance promises reflect a commitment from donors that benefits a recipient, the alliance may substitute for both public and bypass aid.
 
-# From Theory to Testable Predictions for Alliances and Aid
+# Testable Predictions for Alliances and Aid
 
 The expanded perspective on interactions between industrialized countries and developing countries in the previous section implies some testable hypotheses for the relationships between different kinds of alliance commitments and foreign aid. In particular, when alliance promises reflect a commitment from industrialized countries to developing countries, we should expect that recipient governments will be willing to accept these alliance promises in lieu of some share of aid that donor governments give to recipients to make non-development policy deals incentive compatible. This implies a substitution effect for these kinds of alliances.
 
@@ -237,9 +238,9 @@ library(knitr)
 library(here)
 ```
 
-Before proceeding with a more rigorous statistical analysis, it will be helpful to examine some trends in aid allocation and alliances. While more suggestive and definitive, this first look at the data lends preliminary support for the pair of hypotheses levied in this study.
+Before proceeding with a more rigorous statistical analysis, it will be helpful to examine some trends in aid allocation and alliances. While more suggestive than definitive, this first look at the data lends preliminary support for the pair of hypotheses levied in this study.
 
-Figure 1 shows the share of bilateral ODA committed to recipient countries over the time period included in the data sample (2006-2014). ODA is shown by whether recipients share a bilateral alliance (defensive or nonaggression) with a donor. The numerator used to compute these values is the median bilateral aid from donors to a recipient in a given year, and the denominator is the total aid given by a donor in a given year. Results for allies are in red, and results for non-allies are in blue.
+Figure 1 shows the median share of bilateral ODA committed to recipient countries over the time period included in the data sample (2006-2014). ODA is shown by whether recipients share a bilateral alliance (defensive or nonaggression) with a donor. The numerator used to compute these values is the median bilateral aid from donors to a recipient in a given year, and the denominator is the total aid given by a donor in a given year. Results for allies are in red, and results for non-allies are in blue.
 
 ```{r, fig.cap="Share of bilateral ODA committed to recipient countries from 2006-2014. Results shown by whether recipients share a bilateral alliance (defense or nonaggression) with a donor government. The numerator is median ODA committed in a recipient by donors in a given year, and the denominator is total aid given by a donor across recipients in a year."}
 include_graphics(
@@ -247,7 +248,7 @@ include_graphics(
 )
 ```
 
-The trends indicate that the median distribution of ODA from donors is consistently greater in ally than non-ally recipient countries. On the surface, this finding is consistent with the conventional wisdom and allies are rewarded by donor governments with greater aid. However, not all donors have identical alliance portfolios, which means these tends may look different depending on the identity of the donor.
+The trends indicate that the median distribution of ODA from donors is consistently greater in ally than non-ally recipient countries. On the surface, this finding is consistent with the conventional wisdom that allies are rewarded by donor governments with greater aid. However, not all donors have identical alliance portfolios, which means these trends may look different depending on the identity of the donor.
 
 Consider the two most generous donors in the data: Japan and the United States. Figure 2 shows trends in median bilateral ODA commitments for each donor from 2006 to 2014. Median giving is computed both for ally recipients and non-ally recipients of each donor.
 
@@ -257,9 +258,9 @@ include_graphics(
 )
 ```
 
-The trends could not be more different. Japan concentrates quite a lot of its ODA commitments in its allies, so much so that its giving in non-allies is negligible by comparison. The United States, conversely, gives more aid in non-allies. Though the difference is less pronounced relative to Japan's giving, the median giving by the United States is consistently greater in non-allies relative to allies in the period included in this sample. This finding, it is worth noting, is not driven by US giving in Israel, which is not in this sample.
+The trends could not be more different. Japan concentrates quite a lot of its ODA commitments in its allies, so much so that its giving in non-allies is negligible by comparison. The United States, conversely, gives more aid in non-allies. Though the difference is less pronounced relative to Japan's giving, the median giving by the United States is consistently greater in non-allies relative to allies in the period included in this sample. This finding, it is worth noting, is not driven by US giving in Israel, which is not in the data.
 
-This difference in giving observed between Japan and the United States seems puzzling until we consider the theoretical framework put forward in this study. Different kinds of alliances imply different dynamics for aid allocation, and in the case of Japan and the United States we observe markedly different alliance portfolios.
+This difference observed between Japan and the United States seems puzzling until we consider the theoretical framework put forward in this study. Different kinds of alliances imply different dynamics for aid allocation, and in the case of Japan and the United States we observe markedly different alliance portfolios.
 
 Figure 3 shows the share of recipient countries with which Japan and the United States share defensive (red) and nonaggression (blue) pacts from 2006 to 2014. Differences between the alliance promises these donors make with recipients are immediately apparent.
 
@@ -281,11 +282,19 @@ Taken together, these stylized facts remain only suggestive rather than confirma
 
 \clearpage
 
+## Statistical Analysis
+
+While the trends noted in the previous section are suggestive, alliance commitments are surely correlated with many well-known determinants of bilateral ODA. This section shows results from more robust statistical tests. Figure 4 shows mixed effects Tobit estimates for the relationship between nonaggression and defensive pacts with bilateral ODA commitments from donor governments in developing countries. The left panel shows estimated coefficients with total ODA as the outcome, and the right panel shows estimated coefficients with ODA delivered either through the government-to-government (public) channel (blue) and the bypass channel (red). Point estimates are shown with the coefficient value labeled above. 95% confidence intervals are included. The models were estimated with the covariates included in Table 1 and the model specification noted earlier. A full set of estimates along with controls are provided in regression tables in the Appendix.
+
 ```{r, fig.cap="Mixed effect Tobit estimates for the relationship between nonaggression and defensive pacts and total bilateral ODA commitments (left) and ODA commitments delivered alternatively through the government-to-government or bypass channel (right)."}
 include_graphics(
   here("03_figures/main_effects.png")
 )
 ```
+
+Starting with the results for total ODA, the estimates are consistent with both H1 and H2. The first holds that donor governments give more aid in recipients with which they share a nonaggression pact, while the second holds that donor governments give less aid in recipients with which they share a defensive pact. In support of H1, the estimated coefficient for nonaggression pacts is positive ($\beta_1 = 0.14$) and statistically significant ($p < 0.001$). Further in support of H2, the estimated coefficient for defensive pacts is negative ($\beta_2 = -0.88$) and statistically significant ($p < 0.001$).
+
+To put these estimates in substantive terms, these coefficients can be approximately transformed into elasticities using the transformation $\%\Delta = 100 \times [\exp(\beta) - 1]$. Applying this transformation, the estimate for nonaggression pacts corresponds to roughly 15% greater giving, all else equal, in recipient countries with which donor governments share this kind of alliance. Conversely, the estimate for defensive pacts corresponds to roughly 58% less giving, all else equal, in recipient countries with which donor governments share defensive commitments.
 
 ```{r, fig.cap="Mixed effect logit estimates for the relationship between nonaggression and defensive pacts and whether any bilateral ODA is committed (left) and  whether ODA is committed alternatively through the government-to-government or bypass channel (right)."}
 library(knitr)
