@@ -80,7 +80,7 @@ bi_forms <- list(
 #   )
   
 
-## Via OLS ----
+## Via Truncated OLS ----
 
 main_ols_fits <- main_forms %>%
   map(
@@ -196,6 +196,14 @@ main_ppml_fits <- list(
     )
   )
 
+main_ppml_fits[1:3] %>%
+  map_dfr(
+    ~ coeftest(
+      .x$fit, vcov. = .x$vcv
+    ) %>%
+      estimatr::tidy() %>%
+      filter(term %in% c('nonagg', 'defense'))
+  )
 # estimate logged-proportional odds model via mixed effects logit
 
 # lme_fit <- gam(
@@ -226,7 +234,8 @@ model_names <- c(
 screenreg( # OLS fits by total aid and public vs. bypass channels
   main_ols_fits[1:3], include.ci=F,
   custom.coef.map = cmap,
-  custom.model.names = model_names[1:3]
+  custom.model.names = model_names[1:3],
+  stars = c(0.1,0.05,0.01,0.001)
 )
 screenreg( # OLS fits by bypass channel type
   main_ols_fits[-c(1:3)], include.ci = F,
@@ -686,75 +695,10 @@ save(
   main_lme_fits,
   file = here("04_regression_output/main_lme_fits.R")
 )
-
-
-
-
-# compare the us and china ------------------------------------------------
-
-# pull out only USA obs.
-usa_dt <- dt %>%
-  filter(donor == 'USA')
-prc_dt <- read_csv(
-  here('01_data/final_china_data_imputed.csv')
-) 
-prc_dt %>%
-  filter(
-    year %in% unique(usa_dt$year)
-  ) -> prc_dt
-# incorporate chinese treaty data
-atop <- read_csv(
-  here("01_data/atop_dyad_year.csv")
+save(
+  main_ppml_fits,
+  file = here("04_regression_output/main_ppml_fits.R")
 )
-atop <- # need to recover individual country cow codes
-  atop %>%
-  separate(
-    ddyad,
-    into = c('donor', 'recipient'),
-    sep = -3
-  ) %>%
-  mutate(
-    donor = countrycode::countrycode(
-      as.numeric(donor), "cown", "iso3c"
-    ),
-    recipient = countrycode::countrycode(
-      as.numeric(recipient), "cown", "iso3c"
-    )
-  ) %>%
-  select(
-    donor, recipient, year,
-    atopally:consul, asymm
-  )
-atop <- atop %>%
-  filter(donor == 'CHN') %>%
-  select(-donor)
-prc_dt <- prc_dt %>%
-  left_join(
-    atop, by = c('recipient_iso3' = 'recipient', 'year')
-  )
-prc_dt <- prc_dt %>%
-  mutate(
-    across(defense:consul, ~ ifelse(is.na(.x), 0, .x)),
-  )
 
-# us equation
-usa_eq <- ~ nonagg + defense +
-  asinh(income) + asinh(pop) + asinh(disaster) +
-  civilwar + fh_total + asinh(dist) + asinh(trade) +
-  asinh(fdi) + asinh(usmil) + colony
-prc_eq <- ~ nonagg + defense +
-  v2x_api + asinh(gdp / pop) + asinh(pop) +
-  asinh(disaster) + civilwar + asinh(imports + exports) +
-  asinh(mil_visits)
-usa_tobit <- censReg(
-  update(usa_eq, asinh(total_oda) ~ .), 
-  data = plm::pdata.frame(usa_dt, index = 'recipient'),
-  method = 'BHHH'
-)
-prc_tobit <- censReg(
-  update(prc_eq, asinh(debt) ~ .),
-  data = plm::pdata.frame(prc_dt, index = 'recipient_iso3'),
-  method = 'BHHH'
-)
-summary(usa_tobit)
-summary(prc_tobit)
+
+

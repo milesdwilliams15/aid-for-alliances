@@ -296,16 +296,18 @@ Starting with the results for total ODA, the estimates are consistent with both 
 
 To put these estimates in substantive terms, these coefficients can be approximately transformed into elasticities using the transformation $\%\Delta = 100 \times [\exp(\beta) - 1]$. Applying this transformation, the estimate for nonaggression pacts corresponds to roughly 15% greater giving, all else equal, in recipient countries with which donor governments share this kind of alliance. Conversely, the estimate for defensive pacts corresponds to roughly 58% less giving, all else equal, in recipient countries with which donor governments share defensive commitments.
 
-```{r, fig.cap="Mixed effect logit estimates for the relationship between nonaggression and defensive pacts and whether any bilateral ODA is committed (left) and  whether ODA is committed alternatively through the government-to-government or bypass channel (right)."}
-library(knitr)
-library(here)
-include_graphics(
-  here("03_figures/main_logit_effects.png")
-)
-```
+These patterns remain strong both for the government-to-government delivery channel and the bypass channel, as shown in the right panel of Figure 4. Interestingly, the estimates for bypass aid are both greater in magnitude and estimated with modestly more precision relative to government-to-government aid. The estimated coefficients for nonaggression pacts in the public and bypass channels are, respectively, $\beta_1 = 0.28$ and $\beta_1 = 0.35$. Each of these is significant at the $p < 0.001$ level. The estimated coefficients for defensive pacts in these same channels are, respectively, $\beta_2 = -0.59$ and $\beta_2 = -0.85$, both of which are significant at the $p < 0.001$ level.
 
-```{r, fig.cap="Classic Tobit (left) and mixed effects logit (right) estimates for the relationship between nonaggression and defensive pacts and bilateral ODA by specific bypass channel. MO = multilateral organizations; NGO = nongovernmental organizations; TRT = teaching institutions, research institutes or think-tanks; Other = other non-public channels."}
-include_graphics(
-  here("03_figures/bypass_effects.png")
-)
-```
+In substantive terms, donor governments target approximately 32% more aid through the government-to-government channel, and 42% more aid through the bypass channel, in recipients which which donors share nonaggression pacts relative to non-allies. Conversely, donor governments give approximately 45% less aid through the government-to-government channel, and 57% less aid through the bypass channel, in defensive allies relative to non-allies.
+
+## Robustness
+
+The main analysis is consistent with the hypotheses for how donor governments differently target aid in allies depending on the nature of the security pact. Nonaggression pacts where hypothesized to correspond to greater aid giving by donors in allies, while defensive pacts where hypothesized to correspond to less aid giving by donors in allies.
+
+These results follow from mixed effect Tobit regressions, which are an effective way of modeling censored outcomes, but not the only way. The Appendix includes regression tables for a series of robustness checks where alternative estimators are applied to the main regression specification. These alternative methods include OLS estimation, classic Tobit, and PPML. Inference for each of these methods is done via cluster-robust standard errors in lieu of dyadic random intercepts.
+
+Across these methods, coefficient estimates have the expected sign and are statistically significant with the following exceptions. First, while OLS estimates all have the expected sign, the coefficient for nonaggression pacts is only moderately significant when the response is total ODA and insignificant when the response is aid delivered through the government-to-government channel. In addition, the estimate for defensive pacts is only moderately significant when the response is the government-to-government channel.
+
+Second, for PPML, all estimates for nonaggression pacts fall short of statistical significance. Further, when the response is bypass aid the sign on the coefficient for nonaggression pacts reverses direction.
+
+These deviations are notable, but are arguably not detrimental to the primary argument. OLS has well-established and -documented biases in the context of censored response variables. PPML, meanwhile, which is argued to be a robust approach to gravity equation estimation (Silva and Tenreyro 2006), has been shown to yield biased estimates when the outcome variable has a large number of economically determined zeros (Martin and Pham 2020). It was for these reasons that mixed effects Tobit was chosen for the main analysis.
