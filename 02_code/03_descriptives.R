@@ -265,3 +265,80 @@ ggsave(
   height = 3,
   width = 6
 )
+
+# look at Pakistan --------------------------------------------------------
+
+dt %>%
+  filter(
+    recipient == "PAK",
+    donor == "USA"
+  ) %>%
+  ggplot() +
+  aes(year, total_oda) +
+  geom_line(
+    size = .75
+  ) +
+  geom_vline(
+    aes(xintercept = min(year[nonagg==1]))
+  ) +
+  scale_x_continuous(
+    breaks = seq(2005, 2014, by = 2)
+  ) +
+  scale_y_continuous(
+    labels = scales::comma
+  ) +
+  labs(
+    x = NULL,
+    y = "Bilateral ODA from US\n(commitments in mil. $)"
+  )
+ggsave(
+  here("03_figures/us_pak_aid.png"),
+  height = 3,
+  width = 6
+)
+
+# aid to albania ----------------------------------------------------------
+
+dt %>%
+  filter(
+    recipient == "ALB"
+  ) %>%
+  group_by(
+    donor
+  ) %>%
+  mutate(
+    nato = max(defense)
+  ) %>%
+  ungroup %>%
+  ggplot() +
+  aes(
+    x = year, 
+    y = total_oda,
+    color = ifelse(nato==1, 'NATO', 'non-NATO')
+  ) +
+  stat_summary(
+    fun = median, geom = "line",
+    size = 0.75
+  ) +
+  geom_vline(
+    aes(xintercept = min(year[defense==1]))
+  ) +
+  scale_x_continuous(
+    breaks = seq(2005, 2014, by = 2)
+  ) +
+  labs(
+    x = NULL,
+    y = "Median ODA\n(commitments in mil. $)",
+    color = NULL
+  ) +
+  scale_color_manual(
+    values = c(
+      "NATO" = "royalblue",
+      "non-NATO" = "indianred3"
+    )
+  )
+ggsave(
+  here("03_figures/alb_nato_aid.png"),
+  height = 3,
+  width = 6
+)
