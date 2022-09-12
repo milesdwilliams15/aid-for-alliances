@@ -317,7 +317,7 @@ dt %>%
     color = ifelse(nato==1, 'NATO', 'non-NATO')
   ) +
   stat_summary(
-    fun = median, geom = "line",
+    fun = ~ sinh(mean(asinh(.x))), geom = "line",
     size = 0.75
   ) +
   geom_vline(
@@ -328,7 +328,7 @@ dt %>%
   ) +
   labs(
     x = NULL,
-    y = "Median ODA\n(commitments in mil. $)",
+    y = "Mean ODA\n(commitments in mil. $)",
     color = NULL
   ) +
   scale_color_manual(
