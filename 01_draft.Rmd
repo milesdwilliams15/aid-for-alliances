@@ -351,3 +351,91 @@ Only classic Tobit with cluster-robust standard errors yields identical results 
 These deviations are notable, but are arguably not detrimental to the primary argument. OLS has well-established and documented biases in the context of censored response variables. PPML, meanwhile, which is argued to be a robust approach to gravity equation estimation (Silva and Tenreyro 2006), has been shown to yield biased estimates when the outcome variable has a large number of economically determined zeros (Martin and Pham 2020). It was for these reasons that mixed effects Tobit was chosen for the main analysis.
 
 # Conclusion
+
+# Appendix
+
+```{r}
+library(texreg)
+library(AER)
+library(estimatr)
+reg_files <- c("main_tme_fits.R",
+               "main_tfe_fits.R",
+               "main_ols_fits.R",
+               "main_ppml_fits.R")
+reg_load <- function(x) {
+  paste0("04_regression_output/",x)
+}
+reg_files <- reg_load(reg_files)
+load(reg_files[1])
+load(reg_files[2])
+load(reg_files[3])
+load(reg_files[4])
+cmap <- list(
+  "nonagg" = "Nonaggression",
+  "defense" = "Defense",
+  "asinh(income)" = "Income",
+  "asinh(pop)" = "Population",
+  "asinh(disaster)" = "Disaster",
+  "civilwar" = "Civil War",
+  "fh_total" = "Democracy",
+  "asinh(dist)" = "Distance",
+  "asinh(trade)" = "Trade",
+  "asinh(fdi)" = "FDI",
+  "asinh(usmil)" = "Military Aid",
+  "colony" = "Colony"
+)
+```
+
+```{r, results='asis'}
+texreg(main_tme_fits[1:3],
+          custom.coef.map = cmap,
+          custom.model.names = c(
+            "(1) Total ODA",
+            "(2) Gov-to-Gov",
+            "(3) Bypass"
+          ),
+       caption = "Mixed Effect Tobit Estimates",
+       caption.above = T) |> cat()
+```
+
+```{r, results='asis'}
+texreg(main_tfe_fits[1:3],
+          custom.coef.map = cmap,
+          custom.model.names = c(
+            "(4) Total ODA",
+            "(5) Gov-to-Gov",
+            "(6) Bypass"
+          ),
+       caption = "Classical Tobit Estimates",
+       caption.above = T) |> cat()
+```
+
+```{r, results='asis'}
+texreg(main_ols_fits[1:3],
+          custom.coef.map = cmap,
+          custom.model.names = c(
+            "(7) Total ODA",
+            "(8) Gov-to-Gov",
+            "(9) Bypass"
+          ),
+       include.ci = F,
+       caption = "OLS Estimates",
+       caption.above = T) |> cat()
+```
+
+```{r, results='asis'}
+ppml_fits <- lapply(main_ppml_fits, function(x) x$fit)
+ppml_ses <- lapply(main_ppml_fits, function(x) sqrt(diag(x$vcv)))
+texreg(ppml_fits[1:3],
+          custom.coef.map = cmap,
+          custom.model.names = c(
+            "(10) Total ODA",
+            "(11) Gov-to-Gov",
+            "(12) Bypass"
+          ),
+       override.se = ppml_ses[1:3],
+       caption = "PPML Estimates",
+       caption.above = T) |> cat()
+```
+
+# References
