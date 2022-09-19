@@ -362,6 +362,14 @@ These deviations are notable, but are arguably not detrimental to the primary ar
 
 # Conclusion
 
+In his seminal work on the origins of alliances, Walt (1990) hypothesizes that foreign aid plays and important role in determining whether developing countries accede to alliance promises. As he posits, "providing such bribes will enable donors to create effective and cohesive alliances" (1990, 218). He goes on to note that aid confers donors with leverage over recipients since the latter will do what they must to avoid jeopardizing their access to assistance. Alliances, in short, are a desired concession for powerful benefactors, and foreign aid the bargaining chip benefactors use to their advantage to get what they want.
+
+This perspective summarizes the conventional view on the nature of aid-for-alliance exchange and serves as a near truism in the field of IR. This is for good reason. The idea as expressed by Walt (1990) and then fleshed out and formalized by others (see Bueno de Mesquita and Smith 2009) is logically sound and has no small measure of face validity. However, the worrisome effect of truisms is that they often are too good to verify. To be sure, systematic empirical evidence that foreign aid corresponds with political alignment and forms of military assistance abounds (see Alesina and Dollar 2000 and Bermeo 2017, 2018). Yet, evidence that formalized alliances themselves predict greater levels of aid is restricted to studies that focus solely on a single case, that rely only on aggregate aid and alliance data, or that focus exclusively on the behavior of one donor country using a limited alliance dataset.
+
+Parallel to this trend in seemingly taking aid-for-alliance exchange for granted is a lack of circumspection on the theoretical foundations of the conventional view. Alliances are uncritically treated as concessions that aid donors leverage from aid recipients, but as advances in the alliance literature make clear, not all alliance promises are identical---especially where the direction of benefits is concerned.
+
+The situation that characterizes the status quo on aid-for-alliance exchange yields low hanging fruit ripe for the picking. This study is the harvest.
+
 # Appendix
 
 ```{r}
