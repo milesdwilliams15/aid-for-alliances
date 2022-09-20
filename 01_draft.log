@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2017.8.26)  19 SEP 2022 06:26
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2017.8.26)  20 SEP 2022 07:01
 entering extended mode
 **./01_draft.tex
 (01_draft.tex
@@ -1457,21 +1457,21 @@ File: 03_figures/main_effects.png Graphic file (type png)
 <use 03_figures/main_effects.png>
 Package pdftex.def Info: 03_figures/main_effects.png used on input line 1197.
 (pdftex.def)             Requested size: 433.62334pt x 130.08699pt.
-[34 <./03_figures/main_effects.png (PNG copy)>] [35] [36] [37]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1517.
-[38] [39] [40] [41] [42]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1517.
+[34 <./03_figures/main_effects.png (PNG copy)>] [35] [36] [37] [38] [39] [40]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1601.
+[41] [42] [43] [44] [45]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1601.
 (01_draft.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1517.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1517.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1601.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1601.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1517.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1601.
  ) 
 Here is how much of TeX's memory you used:
- 25233 strings out of 493335
- 442920 string characters out of 3136680
+ 25236 strings out of 493335
+ 442941 string characters out of 3136680
  529518 words of memory out of 3000000
  28080 multiletter control sequences out of 15000+200000
  72203 words of font info for 309 fonts, out of 3000000 for 9000
@@ -1541,9 +1541,9 @@ TeX 2.9/fonts/type1/public/mathpazo/fplmri.pfb><C:/Program Files (x86)/MiKTeX 2
 .9/fonts/type1/urw/palatino/uplb8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts
 /type1/urw/palatino/uplr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/u
 rw/palatino/uplri8a.pfb>
-Output written on 01_draft.pdf (42 pages, 882202 bytes).
+Output written on 01_draft.pdf (45 pages, 888273 bytes).
 PDF statistics:
- 387 PDF objects out of 1000 (max. 8388607)
- 103 named destinations out of 1000 (max. 500000)
+ 400 PDF objects out of 1000 (max. 8388607)
+ 106 named destinations out of 1000 (max. 500000)
  37015 words of extra memory for PDF output out of 42996 (max. 10000000)
 
