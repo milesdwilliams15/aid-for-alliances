@@ -1,0 +1,43 @@
+---
+output: 
+  stevetemplates::article2:
+    citation_package: natbib
+    dev: cairo_pdf
+    keep_tex: true
+biblio-style: apsr
+title: "Aid for Alliances? Buying and Selling Alliances in the Political Economy of Aid"
+author:
+- name: Miles D. Williams
+  affiliation: Denison University
+abstract: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit amet libero justo. Pellentesque eget nibh ex. Aliquam tincidunt egestas lectus id ullamcorper. Proin tellus orci, posuere sed cursus at, bibendum ac odio. Nam consequat non ante eget aliquam. Nulla facilisis tincidunt elit. Nunc hendrerit pellentesque quam, eu imperdiet ipsum porttitor ut. Interdum et malesuada fames ac ante ipsum primis in faucibus. Suspendisse potenti. Duis vitae nibh mauris. Duis nec sem sit amet ante dictum mattis. Suspendisse diam velit, maximus eget commodo at, faucibus et nisi. Ut a pellentesque eros, sit amet suscipit eros. Nunc tincidunt quis risus suscipit vestibulum. Quisque eu fringilla massa."
+keywords: "pandoc, r markdown, knitr"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+geometry: margin=1in
+mainfont: cochineal
+
+fontsize: 11pt
+doublespacing: TRUE
+endnote: no
+sansitup: FALSE
+header-includes:
+  - \usepackage{longtable}
+  - \LTcapwidth=.95\textwidth
+  - \linespread{1.05}
+  - \usepackage{hyperref}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F,
+                      warning = F,
+                      message = F,
+                      out.width = '100%',
+                      fig.align = 'center')
+```
+
+This study is important for three reasons. First, it contributes to a growing literature that recognizes linkages between issues in international political economy and international security that historically have been studied in isolation. In particular, this study demonstrates how both foreign aid and military alliances (highly important and regularly studied variables in these respective fields) are deeply intertwined.
+
+Second, this study contributes to our understanding of the role that alliances play in interactions between powerful industrialized countries and comparatively weak developing countries. Specifically, this study underlines how alliances operate as a form of exchange but with differing implications depending on the content alliance promises. Of the two most common kinds of alliances that exist between industrialized countries and developing countries---nonaggression pacts and defensive pacts---the former reflects a concession made by weaker states to strong ones while the latter reflects a concession made by stronger states to weak ones. The demonstration of this difference in the direction of exchange implied by alliance provisions adds to a growing literature that continues to probe the content of alliances and how different security pacts lead to different kinds of behavior by signatories.
+
+Third, and finally, this study joins more recent contributions to the aid literature that have begun to exploit more granular data on aid sectors and delivery channels to better understand the mechanisms and strategies that determine how global development financing gets distributed in developing countries. On this front, this study problematizes the conventional wisdom on aid delivery tactics and donor motives. While some have argued that government-to-government transfers are primarily linked to non-development foreign policy goals for donors while transfers that bypass the recipient government are primarily linked to the promotion of public goods (Dietrich 2013; Steinwand 2015), this study demonstrates that bypass aid is in fact tied to non-development aid-for-policy exchanges (e.g., the buying and selling of alliance commitments). This finding does not negate the view that bypass aid is primarily directed toward the promotion of public goods. To the contrary, and even more surprisingly, it shows that non-development foreign policy goals can be a motivation for directly supporting the promotion of public goods in developing countries. As others have shown, the line between altruism and self-interest is blurry (Bermeo 2017, 2018; Heinrich 2013).
+
+

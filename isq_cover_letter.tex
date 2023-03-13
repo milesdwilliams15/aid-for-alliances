@@ -1,0 +1,263 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  11pt,
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+  \setmainfont[]{cochineal}
+  \setmonofont[]{Fira Code}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}
+    }
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\author{}
+\date{09 November 2022}
+
+% Jesus, okay, everything above this comment is default Pandoc LaTeX template. -----
+% ----------------------------------------------------------------------------------
+% I think I had assumed beamer and LaTex were somehow different templates.
+
+
+\usepackage{kantlipsum}
+
+\usepackage{abstract}
+\renewcommand{\abstractname}{}    % clear the title
+\renewcommand{\absnamepos}{empty} % originally center
+
+\renewenvironment{abstract}
+ {{%
+    \setlength{\leftmargin}{0mm}
+    \setlength{\rightmargin}{\leftmargin}%
+  }%
+  \relax}
+ {\endlist}
+
+\makeatletter
+\def\@maketitle{%
+  \newpage
+%  \null
+%  \vskip 2em%
+%  \begin{center}%
+  \let \footnote \thanks
+      {\fontsize{18}{20}\selectfont\raggedright  \setlength{\parindent}{0pt} \@title \par}
+    }
+%\fi
+\makeatother
+
+
+ 
+
+
+
+%\author{}
+
+
+\date{}
+
+\usepackage{titlesec}
+
+% 
+\titleformat*{\section}{\large\bfseries}
+\titleformat*{\subsection}{\normalsize\itshape} % \small\uppercase
+\titleformat*{\subsubsection}{\normalsize\itshape}
+\titleformat*{\paragraph}{\normalsize\itshape}
+\titleformat*{\subparagraph}{\normalsize\itshape}
+
+% add some other packages ----------
+
+% \usepackage{multicol}
+% This should regulate where figures float
+% See: https://tex.stackexchange.com/questions/2275/keeping-tables-figures-close-to-where-they-are-mentioned
+\usepackage[section]{placeins}
+
+
+
+\makeatletter
+\@ifpackageloaded{hyperref}{}{%
+\ifxetex
+  \PassOptionsToPackage{hyphens}{url}\usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \PassOptionsToPackage{hyphens}{url}\usepackage[draft,unicode=true]{hyperref}
+\fi
+}
+
+\@ifpackageloaded{color}{
+    \PassOptionsToPackage{usenames,dvipsnames}{color}
+}{%
+    \usepackage[usenames,dvipsnames]{color}
+}
+\makeatother
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={},
+             pdfkeywords = {},  
+            pdftitle={},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=magenta,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+
+% Add an option for endnotes. -----
+
+
+
+% This will better treat References as a section when using natbib
+% https://tex.stackexchange.com/questions/49962/bibliography-title-fontsize-problem-with-bibtex-and-the-natbib-package
+
+
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+
+\linespread{1.05}
+
+\newtheorem{hypothesis}{Hypothesis}
+
+
+
+\newcommand{\blankline}{\quad\pagebreak[2]}
+\usepackage{graphicx}
+
+\begin{document}
+
+
+
+\hfill
+\begin{minipage}[t]{1\textwidth}
+\raggedleft%
+{\bfseries  }\\[.35ex]
+\emph{\small Denison University\\
+100 W College St,\\
+Granville, OH} \\[.35ex]
+
+ \small{\tt \href{mailto:williamsmd@denison.edu}{\nolinkurl{williamsmd@denison.edu}}} \\ 
+ \small{\href{http://true}{\tt true}}\\ 
+\hspace{1cm} \\
+ 09 November 2022 \\ 
+\end{minipage}
+
+% \vspace*{1em} 
+
+\vspace*{1em}
+
+Dear Editorial Team:
+
+\vspace*{1em}
+
+ 
+
+% 09 November 2022
+% 
+% \vspace*{1em} 
+% 
+
+% % \setlength{\parindent}{16pt}
+% \setlength{\parskip}{0pt}
+% 
+I would like to submit this original research article entitled ``Aid for
+Alliances? Buying and Selling Alliances in the Political Economy of
+Aid'' for consideration by \emph{International Studies Quarterly}. This
+manuscript is original, has not been published previously, and is not
+currently under review or being considered elsewhere.
+
+In this paper, I show that developed countries target more aid in
+developing countries with which they share a nonaggression pact, and
+less aid in developing countries with which they share a defensive pact.
+This finding is significant in light of the conventional view shared
+among IR scholars that donor countries reward allies with greater aid. I
+show, instead, that the nature of alliance commitments makes a
+difference in whether donors reward or (surprisingly) cut aid to allies.
+This is a distinction that past research has failed to address and its
+recognition is important both for understanding the political objectives
+of foreign aid donors and the substantive impact of the content of
+alliance promises on signatory behavior.
+
+I propose a logic of aid-for-alliance exchange where the substance and
+direction of alliance promises is relevant for understanding why donors
+might increase or cut foreign aid in allies. Of the two most prevalent
+kinds of alliances that developed and developing countries
+sign---nonaggression pacts and defensive pacts---the first has been
+shown by previous studies to correspond with efforts to foster
+cooperation in the wake of heightened tension and mistrust. The second,
+meanwhile, reflects a commitment to militarily intervene if an ally is
+attacked. I posit that the first kind of alliance reflects a kind of
+aid-for-policy exchange, where donors use aid as a material incentive to
+get a recipient to agree to a nonaggression pact. The second kind of
+alliance, alternatively, reflects an asymmetric security commitment from
+developed country donors. Due to the differences in material
+capabilities between developed and developing countries, the offer of
+defense in the face of attack disproportionately benefits developing
+country signatories rather than the generally more powerful developed
+countries. My findings are consistent with this logic and even endure
+when the mode of aid delivery is taken into account.
+
+Given the ubiquity of the view that donors reward allies with greater
+aid, these findings should be of interest to readers of
+\emph{International Studies Quarterly}. Research on alliances and on
+foreign aid have made regular appearances in this journal, but rarely
+are they examined together. For this reason, the simplistic idea that
+allies receive more foreign aid has endured. This study puts this
+conventional wisdom to the test and finds it wanting.
+
+I have no conflicts of interest to disclose. All correspondence
+concerning this manuscript can be addressed to me at
+\texttt{williamsmd@denison.edu}.
+
+Thank you for your consideration.
+
+Best regards,
+
+Dr.~Miles D. Williams, Ph.D.
+
+Visiting Assistant Professor, Data for Political Research
+
+Denison University
+
+\end{document}

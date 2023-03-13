@@ -1,0 +1,299 @@
+% ARTICLE 2 ----
+% This is just here so I know exactly what I'm looking at in Rstudio when messing with stuff.
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  11pt,
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+  \setmainfont[]{cochineal}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}
+    }
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage[]{natbib}
+\bibliographystyle{apsr}
+
+
+\title{Aid for Alliances? Buying and Selling Alliances in the Political
+Economy of Aid}
+\author{true}
+\date{August 17, 2022}
+
+% Jesus, okay, everything above this comment is default Pandoc LaTeX template. -----
+% ----------------------------------------------------------------------------------
+% I think I had assumed beamer and LaTex were somehow different templates.
+
+
+\usepackage{kantlipsum}
+
+\usepackage{abstract}
+\renewcommand{\abstractname}{}    % clear the title
+\renewcommand{\absnamepos}{empty} % originally center
+
+\renewenvironment{abstract}
+ {{%
+    \setlength{\leftmargin}{0mm}
+    \setlength{\rightmargin}{\leftmargin}%
+  }%
+  \relax}
+ {\endlist}
+
+\makeatletter
+\def\@maketitle{%
+  \newpage
+%  \null
+%  \vskip 2em%
+%  \begin{center}%
+  \let \footnote \thanks
+      {\fontsize{18}{20}\selectfont\raggedright  \setlength{\parindent}{0pt} \@title \par}
+    }
+%\fi
+\makeatother
+
+
+\title{Aid for Alliances? Buying and Selling Alliances in the Political
+Economy of Aid }
+
+\date{}
+
+\usepackage{titlesec}
+
+% 
+\titleformat*{\section}{\large\bfseries}
+\titleformat*{\subsection}{\normalsize\itshape} % \small\uppercase
+\titleformat*{\subsubsection}{\normalsize\itshape}
+\titleformat*{\paragraph}{\normalsize\itshape}
+\titleformat*{\subparagraph}{\normalsize\itshape}
+
+% add some other packages ----------
+
+% \usepackage{multicol}
+% This should regulate where figures float
+% See: https://tex.stackexchange.com/questions/2275/keeping-tables-figures-close-to-where-they-are-mentioned
+\usepackage[section]{placeins}
+
+
+
+\makeatletter
+\@ifpackageloaded{hyperref}{}{%
+\ifxetex
+  \PassOptionsToPackage{hyphens}{url}\usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \PassOptionsToPackage{hyphens}{url}\usepackage[draft,unicode=true]{hyperref}
+\fi
+}
+
+\@ifpackageloaded{color}{
+    \PassOptionsToPackage{usenames,dvipsnames}{color}
+}{%
+    \usepackage[usenames,dvipsnames]{color}
+}
+\makeatother
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={Miles D. Williams (Denison University)},
+             pdfkeywords = {pandoc, r markdown, knitr},
+            pdftitle={Aid for Alliances? Buying and Selling Alliances in
+the Political Economy of Aid},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=magenta,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+
+% Add an option for endnotes. -----
+
+
+
+% This will better treat References as a section when using natbib
+% https://tex.stackexchange.com/questions/49962/bibliography-title-fontsize-problem-with-bibtex-and-the-natbib-package
+\renewcommand\bibsection{%
+   \section*{References}%
+   \markboth{\MakeUppercase{\refname}}{\MakeUppercase{\refname}}%
+  }%
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+
+\usepackage{longtable}
+\LTcapwidth=.95\textwidth
+\linespread{1.05}
+\usepackage{hyperref}
+
+\newtheorem{hypothesis}{Hypothesis}
+
+\usepackage{setspace}
+
+% trick for moving figures to back of document
+% really wish we'd knock this shit off with moving tables/figures to back of document
+% but, alas...
+
+% 
+% Optional code chunks ------
+% SOURCE: https://stackoverflow.com/questions/50702942/does-rmarkdown-allow-captions-and-references-for-code-chunks
+
+
+
+\begin{document}
+
+% \textsf{\textbf{This is sans-serif bold text.}}
+% \textbf{\textsf{This is bold sans-serif text.}}
+
+
+% \maketitle
+
+{% \usefont{T1}{pnc}{m}{n}
+\setlength{\parindent}{0pt}
+\thispagestyle{plain}
+{%\fontsize{18}{20}\selectfont\raggedright
+\maketitle  % title \par
+
+}
+
+
+
+
+{
+   \vskip 13.5pt\relax \normalsize\fontsize{11}{12}
+   \MakeUppercase{Miles D. Williams}, \small{Denison University}   
+
+}
+
+}
+
+
+
+
+
+
+
+
+\begin{abstract}
+
+%    \hbox{\vrule height .2pt width 39.14pc}
+
+    \vskip 8.5pt % \small
+
+\noindent \small{Lorem ipsum dolor sit amet, consectetur adipiscing
+elit. Donec sit amet libero justo. Pellentesque eget nibh ex. Aliquam
+tincidunt egestas lectus id ullamcorper. Proin tellus orci, posuere sed
+cursus at, bibendum ac odio. Nam consequat non ante eget aliquam. Nulla
+facilisis tincidunt elit. Nunc hendrerit pellentesque quam, eu imperdiet
+ipsum porttitor ut. Interdum et malesuada fames ac ante ipsum primis in
+faucibus. Suspendisse potenti. Duis vitae nibh mauris. Duis nec sem sit
+amet ante dictum mattis. Suspendisse diam velit, maximus eget commodo
+at, faucibus et nisi. Ut a pellentesque eros, sit amet suscipit eros.
+Nunc tincidunt quis risus suscipit vestibulum. Quisque eu fringilla
+massa.}
+
+
+\vskip 8.5pt \noindent \emph{Keywords}: pandoc, r markdown, knitr \par
+
+%    \hbox{\vrule height .2pt width 39.14pc}
+
+
+
+\end{abstract}
+
+
+\vskip -8.5pt
+
+
+ % removetitleabstract
+
+
+\setlength{\parindent}{16pt}
+\setlength{\parskip}{0pt}
+
+% We'll put doublespacing here
+\doublespacing
+% Remember to cut it out later before bib
+This study is important for three reasons. First, it contributes to a
+growing literature that recognizes linkages between issues in
+international political economy and international security that
+historically have been studied in isolation. In particular, this study
+demonstrates how both foreign aid and military alliances (highly
+important and regularly studied variables in these respective fields)
+are deeply intertwined.
+
+Second, this study contributes to our understanding of the role that
+alliances play in interactions between powerful industrialized countries
+and comparatively weak developing countries. Specifically, this study
+underlines how alliances operate as a form of exchange but with
+differing implications depending on the content alliance promises. Of
+the two most common kinds of alliances that exist between industrialized
+countries and developing countries---nonaggression pacts and defensive
+pacts---the former reflects a concession made by weaker states to strong
+ones while the latter reflects a concession made by stronger states to
+weak ones. The demonstration of this difference in the direction of
+exchange implied by alliance provisions adds to a growing literature
+that continues to probe the content of alliances and how different
+security pacts lead to different kinds of behavior by signatories.
+
+Third, and finally, this study joins more recent contributions to the
+aid literature that have begun to exploit more granular data on aid
+sectors and delivery channels to better understand the mechanisms and
+strategies that determine how global development financing gets
+distributed in developing countries. On this front, this study
+problematizes the conventional wisdom on aid delivery tactics and donor
+motives. While some have argued that government-to-government transfers
+are primarily linked to non-development foreign policy goals for donors
+while transfers that bypass the recipient government are primarily
+linked to the promotion of public goods (Dietrich 2013; Steinwand 2015),
+this study demonstrates that bypass aid is in fact tied to
+non-development aid-for-policy exchanges (e.g., the buying and selling
+of alliance commitments). This finding does not negate the view that
+bypass aid is primarily directed toward the promotion of public goods.
+To the contrary, and even more surprisingly, it shows that
+non-development foreign policy goals can be a motivation for directly
+supporting the promotion of public goods in developing countries. As
+others have shown, the line between altruism and self-interest is blurry
+(Bermeo 2017, 2018; Heinrich 2013).
+
+\end{document}

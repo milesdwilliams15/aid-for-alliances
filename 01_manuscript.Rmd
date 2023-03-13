@@ -1,0 +1,608 @@
+---
+#title: "Aid for Alliances? Buying and Selling Alliances in the Political Economy of Aid"
+#author: "Miles D. Williams"
+#date: '`r Sys.Date()`'
+fontfamily: mathpazo
+fontsize: 12pt
+geometry: margin=1in
+bibliography: ref.bib
+header-includes:
+- \usepackage{float}
+- \usepackage{setspace}
+- \usepackage{dcolumn}
+- \doublespacing
+- \setlength\parindent{24pt}
+- \setlength\parskip{1pt}
+- \usepackage[group-separator={,}]{siunitx}
+- \usepackage{threeparttable}
+- \usepackage{caption}\DeclareCaptionLabelFormat{AppendixTables}{Table A.#2}
+- \usepackage{caption}\DeclareCaptionLabelFormat{AppendixFigures}{Figure A.#2}
+output:
+  pdf_document:
+    number_sections: no
+#abstract: "The conventional view on international aid and alliances holds that donor governments reward alliance partners with greater bilateral assistance. This view rests on a narrow perspective of the function of alliance promises between aid donors and aid recipients and on thinner empirical evidence than many suppose. This study offers a more expansive aid-for-alliance framework and evaluates it by exploiting data on alternative kinds of alliance promises and aid delivery channels. It is hypothesized that of the two main types of alliances that are formed between developed and developing country governments, defensive pacts function as substitutable commitments for a certain share of development assistance, while nonaggression pacts reflect political concessions from recipients that donors compensate for by offering greater development assistance. Analysis of data on the bilateral ODA commitments of 28 OECD-DAC donors to 119 developing country aid recipients from 2006-2014 supports these hypotheses. Further analysis that disaggregates bilateral aid by delivery channel shows that substitution and compensation operate not only via government-to-government aid transfers but also via bypass aid that goes to non-governmental actors in recipients."
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F,
+                      warning = F,
+                      message = F,
+                      out.width = '100%',
+                      fig.align = 'center',
+                      fig.pos = "!t")
+```
+
+# Introduction
+
+Do foreign aid donor governments give more development assistance to their low- and middle-income allies? The idea that they do has near ubiquitous appeal among IR scholars. Many would agree with @walt1987 who argued that donor country policymakers see foreign aid as an important alliance-building tool in their interactions with developing country governments. As goes the conventional logic, a donor country seeks to form an alliance with a developing country, and in exchange for the developing country government's accession the donor offers greater foreign aid. This study presents evidence that challenges this view, showing instead that aid and alliances have a more complicated relationship.
+
+The conventional understanding of aid and alliances has gone unchallenged for some time. Its intuitiveness plays no small role in its popularity. But, despite enjoying widespread acceptance among scholars, a survey of the empirical literature suggests the conventional wisdom on aid and alliances has a much weaker foundation than many suppose [see @alesinaDollar2000 for a canonical example]. Past studies tend to take a informal approach in defining alliances---often never using a measure that truly captures genuine security commitments at all. Other studies that do use a more formal measure use limited samples or incomplete datasets. Never to this author's knowledge have studies considered heterogeneity in alliances. Instead, studies treat alliances as a monolith, a characterization that alliance scholars would summarily reject [@chibaEtAl2015; @johnsonLeeds2011; @leeds2003; @lupuPoast2016].
+
+The fact of this view's widespread acceptance makes these empirical and conceptual oversights all the more embarrassing and the need to address them all the more prescient. This study reflects an effort to more carefully probe the relationship between foreign aid and alliances and, in the process, situate these variables in a richer theoretical framework of exchange between wealthy and low- and middle-income country governments.
+
+The argument and evidence laid out in this study show that the conventional wisdom on aid and alliances is incomplete. The default view, which fits nicely in the aid-for-policy exchange framework outlined by @bdms2009, adheres to a rigid model of the typical aid-for-alliance transaction, namely, that aid is the method of exchange and the alliance the desired concession. This overlooks scenarios where a wealthy donor may use alliance promises as a method of exchange to obtain other concessions or benefits out of its relationship with a low- or middle-income country. The latter case also can fit neatly into the policy exchange framework as per @bdms2009, but it implies a different relationship between aid and alliances---not positive, but *negative*. In this alternative pathway linking aid and alliances, the alliance becomes part of an overall commitment package a wealthy country offers a low- or middle-income country. Following the simple theory of foreign policy substituability laid out by @palmerEtAl2002, the offer of an alliance should displace part of the commitment package comprised of foreign aid since the donor uses these foreign policy levers to accomplish the same overall objective.
+
+Using data on alliances that reflects a more up-to-date operationalization from the alliance literature in IR, this study tests hypotheses about the different effects alliances have on the amount of foreign aid low- and middle-income countries receive from donor governments. This data permits leveraging variation in two kinds of formal security pacts donor governments typically enter into with developing country governments---nonaggression pacts and defensive pacts---to identify when donors give developing country allies more aid and when they give less.[^1]
+
+[^1]: Data come from the Alliance and Treaty Obligations and Project [see @leeds2003].
+
+A survey of the alliance literature reveals that these different alliance types reflect different promises that lend themselves to one or the other pathway through which alliances affect donor giving [@chibaEtAl2015; @johnsonLeeds2011; @leeds2003; @lupuPoast2016]. Nonaggression pacts fit the traditional view as a concession that a donor would like to get out of its relationship with a recipient. Meanwhile, defensive pacts better fit the alternative, as a promise a donor offers a recipient to obtain other security or policy benefits. The first, therefore, is hypothesized to have a positive relationship with donor giving while the latter is hypothesized to have a negative relationship.
+
+Using dyadic panel data on the bilateral Official Development Assistance, or ODA, commitments from industrialized country governments to developing countries defined as low- and middle-income and a measure of nonaggression and defensive promises, this study uses a generalized difference-in-differences design and a lagged-dependent-variable design to assess the effect of these alternative alliance types on foreign aid receipts. 
+
+As hypothesized, across specifications the results provide strong support for a more complicated political economy of aid-for-alliance exchange than the conventional wisdom currently admits. Nonaggression pacts have a consistent positive relationship with aid commitments from a donor to a recipient. Conversely, defensive pacts have a consistent negative relationship with aid commitments from a donor to a recipient. The first finding supports the conventional view on aid and alliances while the second supports the claim that alliances also may act as a substitutable means of exchange rather than solely the end. Further cross-validation and sensitivity analysis support the predictive significance of the alliance measures and show that the main results are robust to possibly extreme forms of omitted variable bias.
+
+These findings contribute to a growing literature that recognizes linkages between issues in international political economy and international security that historically have been studied in isolation. In particular, this study demonstrates with more clarity than past research the links between foreign aid and military alliances (highly important and regularly studied variables in these respective fields). In so doing, this study challenges the conventional wisdom on aid and alliance-building by showing when allies get more aid, and when they get less.
+
+# Background
+
+Well before @walt1987 wrote his seminal *Theory of Alliances* where he details the logic of using foreign aid as an alliance-building tool, scholars and policymakers alike have stressed the importance of foreign aid in strengthening alliances. Studies in fact show that competition for the loyalty of low- and middle-income countries played a role in driving foreign aid giving by the United States and the Soviet Union during the Cold War [@bdms2016; @lundborg1998].
+
+Consider an archetypal case of aid-for-alliance exchange between a foreign aid donor and aid recipient: the United States (a wealthy traditional foreign aid donor) and Pakistan (a developing country and long-standing aid recipient of the US). The US and Pakistan have a decades-long strategic relationship, but political misalignment between their governments remains a perennial challenge [see @husain2979; @kabir2019]. Washington and Islamabad have shared a defensive pact since the 1950s, and the US has granted billions of dollars in foreign economic and military aid to Pakistan over the decades. However, these countries' political differences came to a head in the 2000s. After the events of 9-11 Pakistan became an important non-NATO ally in the War on Terror and cooperated with the US militarily. But tensions grew amid numerous skirmishes between US and Pakistani forces along the Afghanistan-Pakistan border. Even more, in 2009 former president of Pakistan Pervez Musharraf admitted that a sizable share of the nearly 10 billion dollars in aid the US gave to Pakistan since 2001 had been diverted to bolster its military capabilities vis-$\grave{\text{a}}$-vis India.[^2] In the spirit of revitalizing cooperation, the Advanced Partnership with Pakistan Act of 2009 (also known as the Kerry-Lugar Bill) was introduced in the US Congress and passed later in the same year.[^3] With the passage of this bill came a formalized nonaggression pact between Washington and Islamabad and some 7.5 billion dollars in development aid to be disbursed over the following five years. In 2010, President Obama requested an additional boost in aid to Pakistan by some 3 billion dollars.[^4]
+
+[^2]: "Musharraf admits US aid diverted," by the *BBC*: \<<http://news.bbc.co.uk/2/hi/south_asia/8254360.stm>\>. Published September 14, 2009. Accessed September 12, 2022.
+
+[^3]: The details of the bill can be accessed here: \<<https://www.congress.gov/111/plaws/publ73/PLAW-111publ73.pdf>\>.
+
+[^4]: "Obama seeks boost in Pakistan aid," published by *Reuters*: \<<https://www.reuters.com/article/idUSTRE6103AW20100201>\>. Published February 10, 2010. Accessed September 12, 2022.
+
+This scenario matches the conventional wisdom on aid and alliances quite well. A powerful country seeks to promote closer alignment via a formalized alliance and offers foreign aid to make the deal incentive compatible for the developing country security partner. But, while a significant case where clearly foreign aid played a role in alliance-building, it would be a mistake to generalize from the US-Pakistan relationship to other dyadic relationships between wealthy and low-/middle-income countries.
+
+In fact, not all new alliances yield such obvious evidence that they loosen donors' purse strings. Between 2005 and 2014, 86 military alliances came online between pairs of industrialized foreign aid donors and developing country aid recipients. Out of these, an increase in foreign aid from the donor to a recipient occurred in 57 cases. In the remaining 29, the aid recipient experienced a cut to foreign aid.[^5] Does this stylized fact reflect nothing but noise? Or, does something more explain this pattern?
+
+[^5]: Calculation based on analysis of OECD-DAC ODA commitments from OECD.stat cross-referenced with data on alliance commitments from ATOP.
+
+The existing literature provides few clues. An examination of recent and past studies reveals a shocking deficiency of research on the aid-alliance relationship. Even worse, what measures of "ally" studies have used tend to reflect only a loose or casual definition of alliance. In fact, it would make more sense if these studies used terms like "friends" or "partners." For example, in their now widely cited paper, @alesinaDollar2000 conclude that political alliances explain a good deal of the aid allocation decisions of donor governments (and they explicitly use the term "alliances"). However, the authors draw this inference via a measure of UN voting similarity. While an important measure of policy alignment, UN voting patterns do not reflect true alliances---they are not indicative of formal security obligations as defined within the IR literature [@leedsEtAl2002].
+
+Other studies examine only a single case of alliance formation [@kabir2019], while others focus on only one donor country and rely on limited, incomplete datasets [@meernikEtAl1998]. @palmerEtAl2002 provide evidence that NATO membership conditions aid spending by OECD-DAC countries, but their analysis is restricted to total aid spending and donor membership in a single alliance and not alliances formed explicitly with particular developing countries. Taken together, the literature on the role of aid in alliance-building remains suggestive, but far from conclusive. This fact leaves the conventional wisdom on aid and alliances on much shakier footing than many realize.
+
+The weaknesses apparent in the empirical research correspond with similarly anemic progress with respect to theory. A reluctance to keep apace with advances in scholarly work on alliances has left the aid literature flat-footed on the question of whether donors reward allies. Just as aid scholars have increasingly attended to the heterogeneity of aid commitments and aid delivery [see @bermeo2017; @bermeo2018; @dietrich2013; @dietrich2021], alliance scholars have done the same with respect to the content and consequences of alliance promises [see @chibaEtAl2015; @johnsonLeeds2011; @leeds2003; @lupuPoast2016]. How might a richer understanding of alliances produce a richer understanding of how donors wield aid as a foreign policy tool?
+
+The goal of this study is two-fold. First, bring the empirical literature on foreign aid and alliances up-to-date with the definition of alliances applied by actual alliance scholars. Second, apply this better operationalization of alliances to test novel hypotheses linking the aid allocation decisions of donor countries with their alliance promises to aid recipients.
+
+# Aid-for-Alliance Exchange
+
+The conventional wisdom on the relationship between foreign aid and alliances holds that donor governments wield aid as a tool to build and maintain alliances. This view has roots in a broader perspective that sees aid as an instrument of donor foreign policy writ large, one that that donor governments use to promote wide-ranging geostrategic and economic objectives.
+
+Ostensibly given to promote economic development and to provide public goods in aid recipient countries, the ability of aid to support the non-development interests of donors has been recognized for decades by policymakers and scholars alike.[^6] Adherents to this perspective see aid as the functional equivalent of a bribe.[^7] In exchange for greater development financing, donor governments can leverage policy concessions from aid recipients, ranging from security partnerships to market access.
+
+[^6]: One could even argue that this motivation for aid giving has deep historical roots, dating back to antiquity [@markovitsEtAl2019].
+
+[^7]: This function of aid was addressed many decades ago by @morgenthau1962.
+
+Aid fungibility is central to the aid-as-bribe view. Fungibility occurs when a recipient government either uses aid dollars for wayward purposes or decreases its own contributions toward projects or public goods that a donor's aid supports to fund other programs. Aid, in short, effectively acts like a budgetary windfall for the recipient government. As a result, aid can often end up funding, directly or indirectly, recipient activities far afield of its stated purposes. For example, @collierHoeffler2007 estimate that aid from OECD donor governments has financed nearly 40% of military spending among African country governments.
+
+The fungibility of aid makes it a tempting vehicle for rewarding "good behavior" and for forging policy deals. Research shows that donors use aid to reward countries for policy alignment in the UN General Assembly [@alesinaDollar2000; @wang1999], offer greater aid to developing countries when they hold a rotating seat on the UN Security Council [@kuziemkoWerker2006], and provide disproportionate aid to trade partners to maximize market access and spur export consumption [see @bermeo2017; @bermeo2018 for a summary]. This behavior extends beyond "traditional" donors. The People's Republic of China, which has dramatically increased its global development financing over the past two decades, appears to reward developing countries with greater aid for ceasing to diplomatically recognize Taiwan and leverages is overseas development projects to gain access to natural resources in developing countries [@dreherEtAl2022].
+
+@bdms2009 provide a canonical statement on the aid-for-policy exchange framework, though others have approached the issue through a similar lens as well [see @lundborg1998]. The authors situate aid allocation within a formal political economy model that characterizes equilibrium donor government aid allocation and recipient government policy concessions. They show that donor governments give more aid in proportion to a recipient government's willingness to concede to whatever policy change or basket of policy changes a donor prefers.
+
+At the risk of oversimplification, the @bdms2009 model frames the issue like so:
+
+$$
+\begin{aligned}
+\textbf{Step 1: } & \textit{Donor}_i \to \textit{aid} \to \textit{Recipient}_j \\
+\textbf{Step 2: } & \textit{Donor}_i \leftarrow \textit{concession} \leftarrow \textit{Recipient}_j
+\end{aligned} \tag{Aid-for-Policy Exchange}
+$$
+
+In the model, these actions take place simultaneously, but for demonstration it helps to break the exchange down to two steps. In the first, some donor government $i$ offers a recipient government $j$ a package of aid. In the second, $j$ reciprocates by agreeing to a, or a bundle, policy exchange or concession.
+
+The conventional wisdom on aid and alliances fits neatly into this stylized framework. In effect, the accession to an alliance with a donor government is treated as part of the concession bundle that a recipient gives a donor in exchange for aid. To put a finer point on it:
+
+$$
+\begin{aligned}
+\textbf{Step 1: } & \textit{Donor}_i \to \textit{aid} \to \textit{Recipient}_j \\
+\textbf{Step 2: } & \textit{Donor}_i \leftarrow (\textbf{alliance}; \textit{other concessions}) \leftarrow \textit{Recipient}_j
+\end{aligned}\tag{Aid-for-Alliance Exchange}
+$$
+
+The literature, either explicitly or implicitly, adopts this view. After all, it seems like a natural order of events. However, the idea that donor governments only seek alliances as a concession from developing countries has some limitations. It ignores, for example, the possibility that an alliance might serve as a political tool in its own right. What if an alliance was actually part of the bundle of commitments a donor makes to a recipient? The exchange might look like this:
+
+$$
+\begin{aligned}
+\textbf{Step 1: } & \textit{Donor}_i \to (\textbf{alliance};\textit{aid}) \to \textit{Recipient}_j \\
+\textbf{Step 2: } & \textit{Donor}_i \leftarrow \textit{concession} \leftarrow \textit{Recipient}_j
+\end{aligned}\tag{Alliance-for-Policy Exchange}
+$$
+
+This scenario not only implies a different function for alliances, it also implies a different relationship between aid and alliance promises. The nature of this relationship is best captured by a framework for studying foreign policy called foreign policy substitutability. This framework holds that many different foreign policy instruments can be used for the same goal, and in this way in any given situation policymakers will choose one instrument over another to accomplish the same objective [@palmerEtAl2002; @palmerMorgan2006].
+
+Under certain circumstances, the literature on foreign policy substitutability has treated aid and alliances as substitutable foreign policy instruments. In their canonical statement on the matter, @palmerMorgan2006 propose that states pursue two fundamental objectives in their foreign policies, *maintenance* and *change*. The first goal centers around activities states engage in to preserve aspects of the international status quo they find beneficial, while the second centers around activities states engage in to alter aspects of the international status quo they dislike.
+
+Among the tools available to states, @palmerMorgan2006 consider foreign aid an instrument of influence or *change*. This falls in line with the aid-for-policy exchange framework outlined by @bdms2009 who treat aid as a tool for influencing aid recipient policy. @palmerMorgan2006 further posit that certain kinds of alliances are used to gain influence, implying that aid and alliances should act as substitutes in contexts where both tools are used for the same goal. 
+
+This study seeks to synthesize the foreign policy substitutability framework with the aid-for-alliance exchange framework. The latter treats an alliance as an end of a foreign policy activity (giving foreign aid), while the former treats alliances as a foreign policy tool in their own right. This more nuanced framework allows for more heterogeneity in the relationship between aid and alliances. When aid is used to incentivize recipients to join an alliance, we should observe a positive relationship been alliances and foreign aid. But when an alliance is used as a tool of influence, we should observe a negative relationship as aid and alliances are serving as substitutable means for realizing the same goal.
+
+So, when do alliances and aid substitute or complement each other?
+
+# Alliance Types
+
+There are good theoretical reasons to expect foreign aid and alliances to have a more complicated relationship than the conventional wisdom suggests. Before entertaining the idea that different alliances have different significance, either as the objects or else modes of exchange, it first is necessary to identify the relevant kinds of alliances between foreign aid donor governments and aid recipients.
+
+The widely used ATOP dataset documents military obligations between countries that are formalized in alliances among states over time [@leedsEtAl2002]. It draws distinctions between five kinds of commitments. Two of these have relevance when considering relations between donor governments and low- and middle-income aid recipients: (1) defensive pacts and (2) nonaggression pacts.
+
+Defensive and nonaggression pacts are the most common kinds of alliances that are formed between industrialized and developing countries. Other kinds of alliances identified in ATOP---offensive pacts, neutrality pacts, and consultation pacts---are either nonexistent, infrequent, or arguably subsumed under one of the other kinds of alliances.
+
+Offensive pacts are simply nonexistent between industrialized and developing country governments. Neutrality pacts, meanwhile, are rare. Between 1995 and 2014 neutrality pacts were in effect between only seven industrialized country and developing country pairs. Further, all of these pacts corresponded with nonaggression commitments. The presence or absence of consultation pacts, finally, is nearly singular to the presence or absence of defensive pacts. For pairs of industrialized and developing countries between 1995 and 2014, 99.3% of dyad-year observations are equivalent with respect to the presence or absence of consultation and defensive commitments. The latter arguably constitutes a more substantive commitment between partners---either mutual or asymmetric commitments to provide military support in the event of attack---while the former simply commits states to consult on military matters but does not oblige members to take specific actions.
+
+While defensive and nonaggression pacts are most relevant with respect to interactions between industrialized and developing country governments as a descriptive matter, from a theoretical perspective these two alliances can be exploited to test the different linkages between alliance commitments and foreign aid. As will be argued here, defensive pacts reflect a security commitment from an industrialized country to a low- or middle-income country that may substitute for foreign aid. Meanwhile, nonaggression pacts reflect a concession a low- or middle-income country makes to an industrialized country.
+
+Nonaggression pacts bear the markings of alliances as conventionally understood within the aid-for-alliance exchange framework. These commitments often are used to smooth over differences between signatories, foster trust, and promote cooperation. Unlike other kinds of commitments (such as neutrality pacts), nonaggression treaties usually deal specifically with the bilateral relations between signatories and commit partners to dispute-settlement short of resorting to violence [@leedsEtAl2002 and @leeds2003]. More generally, as @lupuPoast2016 note, the conventional view on nonaggression treaties is that they function as a mechanism for overcoming cooperation problems---effectively, they act as an international institution by helping to reduce transaction costs and to promote greater trust. Such was arguably the case when the United States and Pakistan committed to a nonaggression pact in 2009 when tensions between the two countries had been building with respect to terrorist operations supported by the Pakistani government and US counterterrorism activities that had been perceived as provocative by Pakistan.[^8] Such alliances, then, signal efforts to promote greater cooperation in the face of differences---a concession that more powerful industrialized countries may have more success in garnering with the provision of greater aid in order to make cooperation incentive compatible for the developing country government.
+
+[^8]: See, for instance, the Enhanced Partnership with Pakistan Act of 2009 passed by the US Congress. Accessible here: <https://www.congress.gov/111/plaws/publ73/PLAW-111publ73.pdf>.
+
+Defensive pacts reflect very different commitments and by extension serve different goals. One of those goals is deterrence. While studies suggest defensive pacts are not uniformly successful at deterring attacks on the alliance partner [@kenwickEtAl2015], under the right conditions deterrence seems to be the modal outcome [@morrow2017; @WrightRider2014]. This implies that the offer of a defensive pack provides material security benefits. These in turn may substitute for similar benefits achieved through foreign aid.
+
+Some studies show that the fungibility of aid means that recipients often funnel aid dollars toward their own military spending, thus bolstering their own capabilities [@collierHoeffler2007]. This finding is most pronounced in autocratic recipients [@konoMontinola2012] and was certainly the case with Pakistan's use of aid in the lead up to the Advanced Partnership with Pakistan Act of 2009. Because aid dollars, directly or indirectly, can support the security of recipient countries, this suggests a possible mechanism whereby the offer of a defensive alliance might substitute for some fraction of foreign aid. Both provide a similar material benefit to the aid recipient (security), meaning that both may be used interchangeably by donors to curry influence over recipients.
+
+# Hypotheses
+
+The above discussion supports two possible relationships between alliances and foreign aid. When the alliance represents a concession that an aid recipient makes to a donor, the alliance should correspond with an increase in foreign aid. But when the alliance is part of a commitment package a donor makes to a recipient, the alliance should correspond with a decline in foreign aid. In the latter case, consistent with the foreign policy substitutability framework [@palmerMorgan2006; @palmerEtAl2002], the alliance substitutes for a share of foreign aid given to a recipient since both tools are being used to accomplish the same goal. That is, to gain influence by making commitments that either directly (a defensive promise) or indirectly (through the fungibility of foreign aid) bolster the security of the recipient.
+
+The above discussion further points to two kinds of alliances that donor countries regularly form with low- and middle-income aid recipients that fit each of these pathways through which alliances impact aid allocation decisions. While *nonaggression* treaties fit the conventional understanding of aid-for-alliance exchange, *defensive* treaties better fit the alternative. If true, this implies the following pair of hypotheses:
+
+\bigskip
+
+> H1: *Nonaggression treaties correspond with an increase in foreign aid, all else equal*.
+>
+> H2: *Defensive treaties correspond with a decline in foreign aid, all else equal.*
+
+\bigskip
+
+Having established these hypotheses, some alternative expectations bear mentioning. These alternatives deal specifically with defensive pacts and each holds that defensive alliances have a positive relationship with foreign aid rather than a negative one.
+
+First, defensive alliances and aid may be complementary foreign policy tools rather than substitutes. Frameworks such as that proposed by @palmerEtAl2002 and @palmerMorgan2006 explicitly assume that different foreign policy tools can be used interchangeably when directed toward the same goal. Just like substitute goods in economic models of consumer behavior, holding all else constant, an increase in the application of one tool will lead to a decrease in the marginal utility of another tool targeted at the same goal. This view excludes the possibility that tools may be complementary or that the use of one increases the marginal utility of the other. If aid and alliances are complements, then even if they are targeted at the same goal, they should have a positive relationship rather than a negative one.
+
+Second, assuming foreign policy substitutability is the appropriate framework for understanding the links between foreign aid and defensive alliances, it is still possible to observe a positive relationship between these two variables. This would follow if there were some change in donor government preferences that led to an increase in the utility of offering a recipient a concession bundle such that, all else equal, to meet its goals it must simultaneously increase its aid giving in addition to supplementing its concession bundle with a defensive pact.
+
+Though each of these possibilities has merit, both are less than compelling. The foreign policy substituability framework is both an established theory of foreign policy and has proved useful in generating testable and empirically verified hypotheses [@clark2005; @morganPalmer2003; @palmerMorgan2006; @palmerEtAl2002]---though see @deRouenGoldfinch2007 for a critical perspective. As far as this author is aware, evidence of complementarity is comparatively rare, though @bezerraEtAl2015 find evidence for both substitutability and complementarity between giving foreign aid and winning Olympic gold medals on promoting international status.
+
+With respect to the second possibility, for substitution effects to be entirely washed out by shifts in donor preferences said shifts would have to be systematic and seismic. While changes in donor priorities certainly do occur [see @bermeo2017; @bermeo2018] the aid literature by and large is consistent with generally static or slow-moving donor preferences.
+
+# Research Design
+
+To test hypotheses 1 and 2---that bilateral defensive (nonaggression) pacts lead donor governments to target less (more) bilateral foreign aid in developing countries---time-series panel data on official development assistance (ODA) commitments was collected from the Organization for Economic Cooperation's (OECD) Creditor Reporting System (CRS) from 2005 to 2014.[^9] A generalized difference-in-differences (D-in-D) design was employed, along with a lagged-dependent-variable (lagged-DV) design in the event that the parallel trends assumption does not hold.
+
+[^9]: Data were accessed from OECD.stat.
+
+The analysis centers on the following pair of empirical models. The first is the specification for the generalized D-in-D and the second for the lagged-DV:
+
+$$
+\begin{aligned}
+(1) \quad \text{asinh(Aid}_{ijt})&  = \beta_{non} \text{Nonaggression}_{ijt-1} + \beta_{def} \text{Defense}_{ijt-1} \\
+& \quad + \delta_{ij} + \alpha_t + \gamma^\top X_{ijt-1},  \\
+(2) \quad \text{asinh(Aid}_{ijt}) & = \text{asinh(Aid}_{ijt-1}) + \beta_{non} \text{Nonaggression}_{ijt-1} + \beta_{def} \text{Defense}_{ijt-1} \\
+& \quad + \delta_{ij} + \alpha_t + \gamma^\top X_{ijt-1} .
+\end{aligned}
+$$
+
+Both models include dummy variables for nonaggression and defensive alliances respectively along with dyadic (donor-recipient pair) and time intercepts. If $\beta_{non}>0$ this will support H1, and if $\beta_{def} < 0$ this will support H2.
+
+To account for additional time-varying recipient or bilateral factors that might influence donor giving or confound the relationship with aid and alliances, the model further includes a vector of covariates, which are summarized in more detail below. Equation 2 is like 1 save for the inclusion of the one year lag of the outcome variable. Statistical inference is done via cluster robust standard errors (CR1) with clustering by dyad.
+
+Both the generalized D-in-D and lagged-DV designs make bracketing assumptions that may make one or the other a better choice for analyzing the data [@angristPischke2009; @dingLi2019]. The first assumes parallel trends in the outcome while the second assumes ignoribility of past outcomes. If the first holds but the second does not, then the lagged-DV design may depress estimates for the explanatory variables of interest. If the second holds but the first does not, the D-in-D design may provide inflated estimates for the explanatory variables of interest. By using both approaches, we can at minimum guard against the worst violations of the assumptions of either adjustment strategy.
+
+Because all ODA values are highly skewed, but also bound at zero, the inverse hyperbolic sine (asinh) was applied to normalize values. In regression analyses, asinh-transformed variables have a similar interpretation to log-transformed values but do not require the ad hoc addition of \$1 to ODA to ensure zero values are retained [@bw2020].[^10]
+
+[^10]: With sufficiently large values, the interpretation is nearly identical to that provided by the natural log.
+
+This data was merged with the yearly dyadic alliances dataset maintained by the Alliance Treaty Obligations and Provisions Project (ATOP) [@leedsEtAl2002].[^11] ATOP codes five different kinds of alliance commitments: (1) Defense, (2) Offense, (3) Neutrality, (4) Nonaggression, and (5) Consultation. As noted in the forgoing discussion, only defensive and nonaggression pacts have special relevance in the context of industrialized-developing country interactions. Dyadic alliance dummies were used for defensive and nonaggression pacts respectively with "1" denoting that a donor-recipient pair share a common alliance and "0" indicating otherwise.
+
+[^11]: Accessible here: <http://www.atopdata.org/data.html>.
+
+Defensive pacts, according to the ATOP codebook, "obligate an alliance member to provide active military support to an ally" and specifically "to assist an ally militarily in the event of attack on the ally's sovereignty or territorial integrity" [@leeds2022, 11]. Nonaggression pacts obligate signatories to cooperate short of military action and involve promises between members to avoid military conflict with one another. As the ATOP codebook explicitly notes, "nonaggression pacts are primarily aimed at keeping the peace among alliance members" [@leeds2022, 11].
+
+To adjust for possible confounding explanations for aid allocation to alliance partners and also to improve precision, a number of control variables are included in the analysis.[^12] A list of these variables, any transformations applied, and their source is shown in Table 1.[^13]
+
+[^12]: All time varying controls, aside from natural disasters, are lagged by one year.
+
+[^13]: The relevant citation for Penn World Table data is @feenstraEtAl2015. CRED data can be accessed at <https://www.cred.be/>. For more on UCDP/PRIO's Armed Conflict Dataset, see @daviesEtAl2022 and @gleditschEtAl2002. Freedom House data can be accessed at <https://freedomhouse.org/>. For more on CEPII Gravity data see @conteEtAl2022. The latest version of the US *Greenbook* can be downloaded at <https://foreignassistance.gov/>. IMF trade statistics can be obtained at <https://data.world/imf/direction-of-trade-statistics-dots>.
+
+```{r}
+library(kableExtra)
+library(tidyverse)
+tibble(
+  Covariate = c('Income', 'Population', 'Disaster Deaths', 
+                'Civil War', 'Democracy', 'Trade',
+                'FDI', 'Military Aid'),
+  Operationalized = c('GDP per capita in mil. USD (asinh)', 
+                      'In mil. (asinh)',
+                      'Yearly count of deaths (asinh)', 
+                      '1 if > 25 battle deaths',
+                      'Political and civil liberties (reversed)',  
+                      'Imports + exports in mil. USD (asinh)',
+                      'Invest in recipient in mil. USD (asinh)',
+                      'US military aid (asinh)'),
+  Source = c('Penn World Table version 10.0', 
+             'Penn World Table version 10.0',
+             'CRED', 'UCDP/PRIO', 'Freedom House','CEPII',
+             'IMF Trade Statistics','USAID Greenbook')
+) %>%
+  kbl(
+    caption = 'Control Variables',
+    booktabs = T,
+    linesep = ''
+  ) %>%
+  kable_styling(
+    font_size = 8
+  )
+```
+
+# Results
+
+Table 2 reports summary statistics for the data. The sample used included up to 25,464 donor-recipient-year observations from 2006 to 2014. There were a total of 3,309 unique donor-recipient pairs in the data. Bilateral ODA commitments ranged from zero to over 4.7 billion US Dollars with an average of almost 20 million US Dollars. Defense packs were relatively rare in the data, with one present in just over 1.9% of dyad-year observations. Nonaggression pacts are far more common, with one present in just over 15% of dyad-year observations.
+
+\begin{table}[!htbp] \centering 
+  \caption{Summary Statistics} 
+  \label{} 
+  \footnotesize
+\begin{tabular}{@{\extracolsep{5pt}}lrrrr} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+Statistic & \multicolumn{1}{r}{Mean} & \multicolumn{1}{r}{St. Dev.} & \multicolumn{1}{r}{Min} & \multicolumn{1}{r}{Max} \\ 
+\hline \\[-1.8ex] 
+Total ODA & 20.756 & 113.258 & 0.000 & 4,700.298 \\ 
+FDI & 76.012 & 572.982 & $-$7,532.648 & 21,415.890 \\ 
+Population & 46.576 & 170.663 & 0.071 & 1,390.110 \\ 
+Income & 8,288.121 & 7,113.889 & 500.579 & 47,914.020 \\ 
+Disaster & 498.212 & 8,320.960 & 0.000 & 222,658.300 \\ 
+Trade & 412,009,130.000 & 3,769,602,178.000 & 0.000 & 131,762,000,000.000 \\ 
+Democracy & 6.148 & 3.390 & 0 & 12 \\ 
+Civil War & 0.159 & 0.366 & 0 & 1 \\ 
+U.S. Military Aid & 48,998,091.000 & 341,992,633.000 & 0 & 6,670,904,126 \\ 
+Defense & 0.019 & 0.135 & 0 & 1 \\ 
+Nonaggression & 0.153 & 0.360 & 0 & 1 \\ 
+WGI & $-$0.000 & 0.996 & $-$1.636 & 2.535 \\ 
+\hline \\[-1.8ex] 
+\multicolumn{5}{l}{$N =$ 25,464.}
+\end{tabular} 
+\end{table}
+
+Reflecting the more frequent use of nonaggression pacts between donor and recipient countries, only 19 donors in the sample have formed at least one defensive pact with a developing country aid recipient while all 28 have formed nonaggression pacts. The distribution of these alliances is not uniform across donors. The U.S. and France have the most and second most number of defensive pacts with aid recipients in the sample, totaling 290 dyad years and 52 dyad years specifically. The modal number of dyad years with a defensive alliance present per donor is 10.
+
+With respect to nonaggression pacts, alliances appear again with greatest frequency for the U.S. and France, but the number of nonaggression treaties is much larger. In 481 dyad years, a nonaggression pact is present for the U.S., and in 258 a nonaggression pact is present for France. The modal number of dyad-years nonaggression pacts are present for donors is 134. The least frequent occurrence is 30.
+
+Three sections follow. The first presents the main findings, which provide strong support H1 and H2---that donors give more aid for Nonaggression pacts but substitute aid and defensive pacts. 
+
+The remaining two sections show results from efforts to test the fragility of the main findings. First, a leave-one-donor out procedure is used to validate the predictive importance of nonaggression and defensive alliances for donor giving. As we might expect, the results show that the alliance measures improve predictions for donors that frequently form alliances with developing countries. For other donors that only form nonaggression pacts, we see marginally worse predictions.
+
+Next, a sensitivity analysis is done to check the magnitude of omitted variable bias that would be required to overturn the main results. Using a flexible method recently outlined by @cinelliHazlett2020, estimates indicate that unobserved confounders would have to explain several times the variation in bilateral ODA and the alliance measures as does recipient country GDP per capita. GDP per capita, or income, is a well known and strong explanatory variable for donor giving, making it a useful benchmark for sensitivity analysis. 
+
+## Main Findings
+
+Tables 3-6 report the main results along with estimates for alternative model specifications. In addition to estimating the main equations, models that excluded the vector of controls or either of the alliance measures were estimated as well, along with versions where the alliance measures were interacted. In all tables, estimates for the vector of controls and dyadic and year intercepts are not shown. To see estimates for the controls, see Tables A1 and A2 in the Appendix.
+
+Table 3 shows estimates for the generalized D-in-D design using just the alliance measures and dyad and year intercepts. Models 1 and 2 show estimates with either of the alliance measures excluded from estimation, Model 3 shows estimates with both measures included, and 4 includes an interaction term. The main terms change very little across specifications and are statistically significant at the $p < 0.001$ level, except for the interaction model where the estimate on defensive pacts is only marginally significant. However, the interaction term is quite small and statistically indistinguishable from zero. This suggests the data is consistent with an additive effect for the different alliance measures rather than a multiplicative one. That is, the presence of one kind of alliance between a donor or recipient does not significantly change the estimated effect of the other kind of alliance when it is present.
+
+If we focus on Model 3, the direction of estimates for each of the alliance measures are consistent with H1 and H2. The estimates are also substantial. Because ODA was transformed using the inverse hyperbolic sine, we can roughly convert the estimated coefficients for nonaggression and defensive pacts to elasticities. According to Model 3, donor countries give approximately 84% more foreign aid to nonaggression partners, all else equal. Meanwhile, donors give more than 33% less aid to defensive allies, all else equal. 
+
+```{r results='asis'}
+load(here::here("04_regression_output",
+                "main_ols_fits.R"))
+library(texreg)
+library(estimatr)
+cmap <- list(
+  'nonagg' = 'Nonaggression',
+  'defense' = 'Defense',
+  'nonagg:defense' = 'Interaction'
+)
+texreg( # only FEs
+  main_ols_fits[1:4], include.ci=F,
+  custom.coef.map = cmap,
+  stars = c(0.1,0.05,0.01,0.001),
+  caption = "Generalized Difference-in-Differences (No Controls)",
+  caption.above = T,
+  custom.model.names = paste0("Model ", 1:4),
+  custom.gof.rows = list(
+    "Observations" = lapply(
+      main_ols_fits[1:4],
+      function(x) scales::comma(x$nobs) 
+    ),
+    "Dyads" = lapply(
+      main_ols_fits[1:4],
+      function(x) scales::comma(x$nclusters)
+    )
+  ),
+  include.nobs = F,
+  include.nclust = F,
+  include.rsquared = F
+) 
+```
+
+Table 4 shows estimates for the lagged-DV design. Like with Table 3, these models did not include the vector of controls. As would be expected given the bracketing assumptions of D-in-D and lagged-DV designs [@angristPischke2009; @dingLi2019], these estimates are attenuated relative to those shown in Table 3. However, like Table 3, the main estimates change very little across specifications.
+
+We focus our attention on Model 7, which includes both of the alliance measures. Estimates from the lagged-DV design remain consistent with H1 and H2, though the magnitudes of the estimates are more modest. After converting the coefficients to elasticities, the estimates show that donors give more than 29% more foreign aid to nonaggression partners and give more than 29% less foreign aid to defensive partners, all else equal. The first estimate is statistically significant at the $p < 0.01$ level and the second at the $p < 0.05$ level.
+
+```{r results='asis'}
+texreg( # FEs + DV lag 
+  main_ols_fits[5:8], include.ci=F,
+  custom.coef.map = cmap,
+  stars = c(0.1,0.05,0.01,0.001),
+  caption = "Lagged-Dependent-Variable (No Controls)",
+  caption.above = T,
+  custom.model.names = paste0("Model ", 5:8),
+  
+  custom.gof.rows = list(
+    "Observations" = lapply(
+      main_ols_fits[5:8],
+      function(x) scales::comma(x$nobs) 
+    ),
+    "Dyads" = lapply(
+      main_ols_fits[5:8],
+      function(x) scales::comma(x$nclusters)
+    )
+  ),
+  include.nobs = F,
+  include.nclust = F,
+  include.rsquared = F
+)
+```
+
+Table 5 shows D-in-D estimates for models that also include the vector of covariates outlined in the Research Design section. Estimates for the vector of controls are in Table A1 in the Appendix. While accounting for these covariates attenuates the estimates for the alliance measures, their signs remain the same and the coefficients remain statistically significant. Further, across specifications, excluding one of the alliances does not materially change the estimate for the other, nor is the data consistent with an interactive relationship between alliance types and foreign aid.
+
+Model 11 shows estimates for the alliance measures from equation 1 (the main D-in-D specification) introduced in the previous section. Converting the coefficients to elasticities, the estimates show that donors give more than 61% more foreign aid to nonaggression partners and more than 31% less foreign aid to defensive partners.
+
+```{r results='asis'}
+texreg( # FEs + controls
+  main_ols_fits[9:12], include.ci=F,
+  custom.coef.map = cmap,
+  stars = c(0.1,0.05,0.01,0.001),
+  caption = "Generalized Difference-in-Differences (With Controls)",
+  caption.above = T,
+  custom.model.names = paste0("Model ", 9:12),
+  
+  custom.gof.rows = list(
+    "Observations" = lapply(
+      main_ols_fits[9:12],
+      function(x) scales::comma(x$nobs) 
+    ),
+    "Dyads" = lapply(
+      main_ols_fits[9:12],
+      function(x) scales::comma(x$nclusters)
+    )
+  ),
+  include.nobs = F,
+  include.nclust = F,
+  include.rsquared = F
+)
+```
+
+Table 6 summarizes the estimates from the main lagged-DV specification (equation 2 in the previous section). All models include the vector of controls. Table A2 in the Appendix shows the estimates for these covariates. Like previous specifications, the estimates for the alliance measures are nearly the same and the data remain inconsistent with an interactive relationship between the alliance measures and foreign aid.
+
+Model 15 shows the estimates for the primary lagged-DV specification. While use of the lagged-DV design moderates the relationship between nonaggression pacts and foreign aid relative to the D-in-D design, the estimate for defensive pacts remains roughly the same. Converting the coefficients to elasticities, the estimates show that donors give more than 39% more foreign aid to nonaggression partners and more than 28% less foreign aid to defensive partners, all else equal.
+
+```{r results='asis'}
+texreg( # FEs + lag + controls
+  main_ols_fits[13:16], include.ci=F,
+  custom.coef.map = cmap,
+  stars = c(0.1,0.05,0.01,0.001),
+  caption = "Lagged-Dependent-Variable (With Controls)",
+  caption.above = T,
+  custom.model.names = paste0("Model ", 13:16),
+  
+  custom.gof.rows = list(
+    "Observations" = lapply(
+      main_ols_fits[13:16],
+      function(x) scales::comma(x$nobs) 
+    ),
+    "Dyads" = lapply(
+      main_ols_fits[13:16],
+      function(x) scales::comma(x$nclusters)
+    )
+  ),
+  include.nobs = F,
+  include.nclust = F,
+  include.rsquared = F
+)
+```
+
+## Cross-validation
+
+The main results support H1 and H2. While donors give more aid to nonaggression partners, they give less to defensive partners. This pattern is consistent with the theoretical argument that these different alliances correspond with different donor objectives. While nonaggression pacts are argued to fit the conventional narrative on aid and alliances (that donors use aid to buy or build alliances with low- and middle-income aid recipients), defensive alliances are argued to function as a foreign policy tool that donors use to accomplish goals similar to foreign aid. If true, aid and defensive alliances should be substitutes and thus have a negative relationship [@palmerEtAl2002; @palmerMorgan2006].
+
+While the main findings are consistent with this story, it is useful to quantify their fragility. The purpose of this section and the following one is to test the bounds on these estimates. In this section, cross-validation is used to assess the explanatory power of the alliance measures for individual donor governments. It may be that the main findings only apply to a subset of donors. If so, how many and which ones?
+
+The procedure used is a conceptually simple but computationally time-intensive due to the size of the data sample. I take a k-fold cross-validation approach where I estimate models with and without the alliance measures and do so for samples that successively leave out one donor at a time. I then get predictions for the donor left out of the sample. For each, I calculate the root mean squared error (RMSE) of the predictions and calculate the difference in the RMSE due to including alliances in the model. This approach makes it possible to quantify how much accounting for alliances betters or worsens predictions for the aid allocations of a given donor.
+
+Figure 1 shows the change in RMSE per donor due to including the alliance measures relative to models that exclude these measures. Predictions were made using both the D-in-D and lagged-DV designs. Negative values indicate that including the alliance measures improved predictions (they led to a reduction in the prediction RMSE) while positive values indicate that including the alliance measures worsened predictions (they led to an increase in the prediction RMSE). As the figure shows, alliances improve predictions for exactly half of the sample of donors but make them worse for the remaining half. While the magnitudes of the changes to RMSE differ by the design, the direction of the change is always the same.
+
+![Change in prediction RMSE by including *Nonaggression* and *Defense* alliances in the data.](03_figures/crosval.png)
+
+On the one hand, these estimates suggest that alliances may not be as important for understanding donor giving as the main results suggest. However, before we reject the idea that alliances matter, it is important to contextualize their predictive power for specific donors. 
+
+Table 7 summarizes whether predictions improved by the number of dyad-year observations in the data for which a donor has a nonaggression or defensive alliance with an aid recipient. Column 1 shows the unique number of such dyad-years for defensive alliances, and column 2 shows the unique number of such dyad years for nonaggression alliances. The third column gives the share of donors per unique number of defensive and nonaggression alliances for which predictions improved by including the alliance measures in the model. The fourth column lists the associated donors. If alliances have no predictive power, we would expect whether donors have many or few alliances to have no correspondence with their explanatory power. But this is not what we observe. Instead, alliances have explanatory power precisely among the donors that most frequently form alliances with developing countries---particularly among those that forge both kinds of alliances. 
+
+\begin{table}[!htbp] \centering 
+  \caption{Prediction Performance by Number of Alliances} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}} llll} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+$N$ Defense & $N$ Nonaggression & $\%$ Improved & Donors \\ 
+\hline \\[-1.8ex] 
+$0$ & $127$ & $0$ & AUS, KOR \\ 
+$0$ & $139$ & $0$ & JPN, NZL \\ 
+$0$ & $149$ & $50$ & AUT, FIN, IRL, SWE \\ 
+$0$ & $159$ & $0$ & CHE \\ 
+$2$ & $30$ & $50$ & POL, SVK \\ 
+$4$ & $59$ & $0$ & CZE, ISL \\ 
+$4$ & $75$ & $100$ & LUX \\ 
+$6$ & $74$ & $0$ & SVN \\
+$10$ & $134$ & $50$ & DNK, GRC \\ 
+$10$ & $149$ & $50$ & BEL, DEU, NLD, PRT \\ 
+$10$ & $159$ & $100$ & ITA \\ 
+$10$ & $170$ & $100$ & ESP \\ 
+$10$ & $177$ & $100$ & NOR \\ 
+$10$ & $191$ & $100$ & GBR \\ 
+$10$ & $219$ & $100$ & CAN \\ 
+$57$ & $273$ & $100$ & FRA \\ 
+$322$ & $527$ & $100$ & USA \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table}
+
+## Sensitivity Analysis
+
+The above analysis shows that alliances explain donor behavior precisely among the donors that form alliances with developing countries. But, it cannot tell us whether unobserved factors that are correlated with alliances and aid giving could explain this away. @cinelliHazlett2020 outline a flexible framework for thinking about the sensitivity of estimates to omitted variable bias that is agnostic about the functional form of confounding. It also makes it possible to benchmark confoundingness using observed covariates. I selected recipient country GDP per capita, or Income, as the benchmark. GDP per capita is often used as a measure of economic development and is a well-established and robust predictor of donor giving.\footnote{Sensitivity analysis is done using the `{sensemakr}` R package.} A confounding variable that accounts for as much variation in donor giving as this would be a truly powerful omitted variable.
+
+Tables 8 shows sensitivity estimates for each of the alliance measures per the generalized D-in-D design and the lagged-DV design. For each alliance type, its estimated coefficient and summary statistics are shown. For each, a robustness value or RV is shown that indicates the percent variance explained in the outcome and explanatory variable of interest that some unobserved confounder would have to account for to change the absolute value of the coefficient estimate to zero ($RV_{q = 1}$) and, more modestly, to make the estimate statistically insignificant at the $p < 0.05$ level ($RV_{q=1,\alpha = 0.05}$). For reference, we can compare the variance explained by GDP per capita or Income to get a sense for the relative predictive power an unobserved covariate would have to have to overturn the results. 
+
+\begin{table}[!h]
+\centering
+\caption{Sensitivity Analysis Estimates}
+\begin{tabular}{lrrrrrr}
+\multicolumn{7}{c}{\textit{D-in-D Design}} \\
+\hline \hline 
+Treatment: & Est. & S.E. & t-value & $R^2_{Y \sim D |{\bf X}}$ & $RV_{q = 1}$ & $RV_{q = 1, \alpha = 0.05}$  \\ 
+\hline 
+\textit{Defense} & -0.385 & 0.118 & -3.272 & 0\% & 2.1\% & 0.8\% \\ 
+\hline 
+df = 24284 & & \multicolumn{5}{r}{ \small \textit{Bound (1x Income)}: $R^2_{Y\sim Z| {\bf X}, D}$ = 0.4\%, $R^2_{D\sim Z| {\bf X} }$ = 0\%} \\
+\hline 
+\multicolumn{7}{c}{} \\
+\hline 
+Treatment: & Est. & S.E. & t-value & $R^2_{Y \sim D |{\bf X}}$ & $RV_{q = 1}$ & $RV_{q = 1, \alpha = 0.05}$  \\ 
+\hline 
+\textit{Nonaggression} & 0.475 & 0.058 & 8.242 & 0.3\% & 5.2\% & 4\% \\ 
+\hline 
+df = 24284 & & \multicolumn{5}{r}{ \small \textit{Bound (1x Income)}: $R^2_{Y\sim Z| {\bf X}, D}$ = 0.4\%, $R^2_{D\sim Z| {\bf X} }$ = 1.3\%} \\
+\hline \hline
+\multicolumn{7}{c}{} \\
+\multicolumn{7}{c}{\textit{Lagged-DV Design}} \\
+\hline \hline 
+Treatment: & Est. & S.E. & t-value & $R^2_{Y \sim D |{\bf X}}$ & $RV_{q = 1}$ & $RV_{q = 1, \alpha = 0.05}$  \\ 
+\hline 
+\textit{Defense} & -0.379 & 0.117 & -3.232 & 0\% & 2.1\% & 0.8\% \\ 
+\hline 
+df = 24283 & & \multicolumn{5}{r}{ \small \textit{Bound (1x Income)}: $R^2_{Y\sim Z| {\bf X}, D}$ = 0.4\%, $R^2_{D\sim Z| {\bf X} }$ = 0\%} \\
+\hline 
+\multicolumn{7}{c}{} \\
+\hline 
+Treatment: & Est. & S.E. & t-value & $R^2_{Y \sim D |{\bf X}}$ & $RV_{q = 1}$ & $RV_{q = 1, \alpha = 0.05}$  \\ 
+\hline 
+\textit{Nonaggression} & 0.5 & 0.058 & 8.676 & 0.3\% & 5.4\% & 4.2\% \\ 
+\hline 
+df = 24283 & & \multicolumn{5}{r}{ \small \textit{Bound (1x Income)}: $R^2_{Y\sim Z| {\bf X}, D}$ = 0.4\%, $R^2_{D\sim Z| {\bf X} }$ = 1.3\%} \\
+\hline
+\hline
+\end{tabular}
+\end{table}
+
+The sensitivity estimates for defensive pacts suggests that an unobserved confounder or group of such confounders would need to account for twice the variation as recipient GDP per capita to make the estimate for defensive pacts statistically insignificant. The variance explained would need to be four times that of GDP per capita to reduce the absolute value of the estimate to zero.
+
+The sensitivity estimates for nonaggression pacts suggest than an unobserved confounder would need to account for 10 times the variation in as recipient GDP per capita to make the estimate statistically significant at the $p < 0.05$ level. To drive the absolute magnitude of the estimate to zero, the estimate would have to account for more than 13 times the variation explained by GDP per capita.
+
+On both counts, this analysis shows that a truly powerful omitted variable would be required to overturn the main results. To be sure, sensitivity analysis cannot be used to rule out such an omitted variable. It does imply, however, that the estimates are robust to relatively modest and even more extreme omitted variable bias.
+
+# Conclusion
+
+The prevailing view in IR holds that foreign aid is an alliance-building tool, and many scholars cite a positive correlation between alliances and donor giving as supporting evidence. However, a survey of the literature reveals this evidence to be more ephemeral than many suspect. Not only do many studies that draw this inference fail to use a true measure of alliance commitments, the studies that do use such a measure rely on data or samples that limit our ability to generalize beyond a specific alliance or donor. Even more, despite a growing body of research on alliance heterogeneity, the conventional wisdom on aid and alliances adheres to a monolithic understanding on the function of alliance promises. As a result, we know much less about the aid-alliance relationship than previously thought and have left too much space for flat-footed empiricism to drive theoretical thinking.
+
+One study cannot hope to reverse this trend entirely, but it can be a first step among many toward developing a richer theoretical understanding and empirical investigation of the interplay between foreign aid and alliances as tools of statecraft. With respect to theory, this study posits a more expansive framework of the function of aid with respect to alliances, embedding this theory within the political economy framework proposed by @bdms2009 but also incorporating insights from the foreign policy substitutability framework as refined by @palmerEtAl2002 and @palmerMorgan2006. 
+
+While holding to the basic claim that donor governments can use the offer of development aid to buy alliance commitments from low- and middle-income recipient countries, this study goes further to consider conditions when aid and alliances may be substitutable foreign policies. In the first scenario, the conventional wisdom should apply, and as a result aid and alliances should have a positive relationship. However, in the second, theories of foreign policy substitutability predict that aid and alliances should have a negative relationship as one foreign policy tool substitutes for part or all of the function of the other. In this scenario, the military alliance replaces part of the material benefit that an aid recipient receives from foreign aid. The offer of a defensive alliance allows a donor to offer less foreign aid, all else equal.
+
+Relying on insights from the alliance literature, two kinds of alliance types are hypothesized to have contrasting relationships with foreign aid---nonaggression and defensive pacts. The first fits the classical understanding of aid and alliances while the second fits the foreign policy substitutability view. That implies two hypotheses: (1) donors should give more aid, all else equal, to nonaggression partners and (2) donors should give less aid, all else equal, to defensive partners.
+
+I put these hypotheses to the test via a generalized difference-in-differences design and lagged-dependent-variable design and control for a number of confounding covariates. The results across specifications support the main hypotheses, showing that donors do indeed offer more aid for nonaggression pacts, but substitute aid and defensive pacts. Further cross-validation and sensitivity analysis support the predictive significance of the alliance measures and show that the main estimates are robust to moderate and even more extreme omitted variable bias.
+
+To further refine this line of research, future scholars may want to explore different historical periods to probe whether different geostrategic contexts alter or attenuate the patterns observed here. This study further only analyzes the behavior of traditional foreign aid donors. It is worth exploring whether nontraditional and emerging donors behave the same way.
+
+Ultimately, the aim of this study is not to provide the definitive statement on aid and alliances. Rather, the goal is to challenge the status quo on this question and highlight the need for IR scholarship that reevaluates and more rigorously interrogates the intersection of these two important tools of foreign policy.
+
+\clearpage
+# Appendix
+
+\setcounter{table}{0}
+\renewcommand{\thetable}{A\arabic{table}}
+
+Tables A1 and A2 show the results for the D-in-D and lagged-DV designs along with estimates for the control variables. Year and dyad intercepts are not show. CR1 standard errors are shown and are clustered by dyad.
+
+\clearpage
+
+```{r results='asis'}
+cmap <- list(
+  'nonagg' = 'Nonaggression',
+  'defense' = 'Defense',
+  'nonagg:defense' = 'Interaction',
+  'asinh(total_oda_lag)' = "Aid (lag)",
+  'asinh(income_lag)' = "Income",
+  'asinh(pop_lag)' = "Population",
+  'asinh(disaster)' = 'Disaster',
+  'civilwar' = 'Civil War',
+  'fh_total_lag' = 'Democracy',
+  'asinh(trade_lag)' = 'Trade',
+  'asinh(fdi_lag)' = 'FDI',
+  'asinh(wgi_stand_lag)' = 'Governance',
+  'asinh(usmil)' = 'U.S. Military Aid'
+)
+texreg( # FEs + controls
+  main_ols_fits[9:12], include.ci=F,
+  custom.coef.map = cmap,
+  stars = c(0.1,0.05,0.01,0.001),
+  caption = "Generalized Difference-in-Differences (With Controls)",
+  caption.above = T,
+  custom.model.names = paste0("Model ", 9:12),
+  
+  custom.gof.rows = list(
+    "Observations" = lapply(
+      main_ols_fits[9:12],
+      function(x) scales::comma(x$nobs) 
+    ),
+    "Dyads" = lapply(
+      main_ols_fits[9:12],
+      function(x) scales::comma(x$nclusters)
+    )
+  ),
+  include.nobs = F,
+  include.nclust = F,
+  include.rsquared = F
+)
+texreg( # FEs + lag + controls
+  main_ols_fits[13:16], include.ci=F,
+  custom.coef.map = cmap,
+  stars = c(0.1,0.05,0.01,0.001),
+  caption = "Lagged-Dependent-Variable (With Controls)",
+  caption.above = T,
+  custom.model.names = paste0("Model ", 13:16),
+  
+  custom.gof.rows = list(
+    "Observations" = lapply(
+      main_ols_fits[13:16],
+      function(x) scales::comma(x$nobs) 
+    ),
+    "Dyads" = lapply(
+      main_ols_fits[13:16],
+      function(x) scales::comma(x$nclusters)
+    )
+  ),
+  include.nobs = F,
+  include.nclust = F,
+  include.rsquared = F
+)
+```
+
+
+\clearpage
+
+# References

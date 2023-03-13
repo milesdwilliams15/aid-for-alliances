@@ -1,0 +1,21 @@
+---
+#title: "Untitled"
+#author: "Miles D. Williams"
+#date: '2022-10-11'
+output: pdf_document
+fontfamily: mathpazo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+\pagenumbering{gobble}
+
+## Aid (f)or Alliances? 
+
+**Abstract:** Do wealthy countries reward their low- and middle-income allies with greater foreign aid? The prevailing wisdom is that they do, but this study shows that the link between aid and alliances is more complicated. Blending an established political economy framework of aid-for-policy exchange with a similarly established foreign policy substitutability framework yields two novel hypotheses for the relationship between aid and alliances. While some alliance promises reflect recipient concessions to donors, others reflect donor commitments to recipients. If this is true, the first kind of alliance should be associated with the offer of greater aid, and the second should be associated with cuts to aid. These hypotheses are tested using panel data on bilateral ODA commitments from 2006 to 2014 and measures of two different types of alliances donors regularly form with aid recipients (nonaggression and defensive). A generalized difference-in-differences design and a lagged-dependent-variable design are employed. Estimates support the main hypotheses and are robust to the inclusion of various confounding covariates. Further cross-validation and sensitivity analysis support the predictive power and robustness of the main findings. Sometimes the question for donors is not "aid *for* alliances" but "aid *or* alliances".
+
+**Keywords:** *foreign aid, alliances, exchange*
+
+**Word Count:** `r scales::comma(wordcountaddin::word_count("01_manuscript.Rmd"))`

@@ -1,17 +1,21 @@
 ## Main Analysis Script ##
 ## Started: 7/14/2022   ##
-## Updated: 7/14/2022   ##
+## Updated: 2/21/2023   ##
+
+# Note: After being rejected from ISQ I'm doing a few things:
+# 1. dropping the stuff about aid channels
+# 2. trying out a generalized diff-in-diff design
+# 3. I'll also check out some interactions with donor gdp
 
 
 # setup -------------------------------------------------------------------
 rm(list = ls())
-library(tidyverse) # because tidyvers is life
+library(tidyverse) # because tidyverse is life
 library(here)      # makes getting files easier
 library(estimatr)  # for linear models with robust inference
-library(AER)       # for tobit
-library(censReg)   # for tobit with random intercepts
-library(mgcv)      # for logit with random intercepts
-
+library(coolorrr)
+set_theme()
+set_palette()
 
 # some helpers ------------------------------------------------------------
 
@@ -41,178 +45,85 @@ dt <- dt %>% # lag alliance variables and covariates
   group_by(dyad) %>%
   mutate(
     across(
-      c(defense, nonagg, income, pop, fh_total, trade, fdi, usmil),
-      ~ lag(.x, order_by = year)
+      c(total_oda, wgi_stand, defense, nonagg, income, pop, fh_total, trade, fdi, usmil),
+      ~ lag(.x, order_by = year),
+      .names = "{.col}_lag"
     )
-  ) %>% drop_na(defense)
+  ) %>% drop_na(defense) %>%
+  mutate(
+    dyad = as.factor(dyad)
+  )
 
 # estimate models ---------------------------------------------------------
 
-base_form <- ~ nonagg + defense + # outcomes of interest
+base_form <- asinh(total_oda) ~ 
   # controls
-  asinh(income) + asinh(pop) + asinh(disaster) + 
-  civilwar + fh_total + asinh(dist) + asinh(trade) +
-  asinh(fdi) + asinh(usmil) + colony
+  asinh(income_lag) + asinh(pop_lag) + asinh(disaster) + 
+  civilwar+ fh_total_lag + asinh(dist) + asinh(trade_lag) +
+  asinh(fdi_lag) + wgi_stand_lag + asinh(usmil) 
 
-main_forms <- list(
-  update(base_form, asinh(total_oda) ~ .),
-  update(base_form, asinh(gov_oda) ~ .),
-  update(base_form, asinh(total_oda - gov_oda) ~ .),
-  update(base_form, asinh(ngo_oda) ~ .),
-  # update(base_form, asinh(ppp_oda) ~ .), # no public private partnerships
-  update(base_form, asinh(mlt_oda) ~ .),
-  update(base_form, asinh(trt_oda) ~ .),
-  update(base_form, asinh(otr_oda) ~ .)
+forms <- list(
+  update(base_form, . ~ - . + nonagg),
+  update(base_form, . ~ - . + defense),
+  update(base_form, . ~ - . + nonagg + defense),
+  update(base_form, . ~ - . + nonagg + defense + nonagg:defense),
+  update(base_form, . ~ - . + asinh(total_oda_lag) + nonagg),
+  update(base_form, . ~ - . + asinh(total_oda_lag) + defense),
+  update(base_form, . ~ - . + asinh(total_oda_lag) + nonagg + defense),
+  update(base_form, . ~ - . + asinh(total_oda_lag) + nonagg + defense + nonagg:defense),
+  update(base_form, . ~ . + nonagg),
+  update(base_form, . ~ . + defense),
+  update(base_form, . ~ . + nonagg + defense),
+  update(base_form, . ~ . + nonagg + defense + nonagg:defense),
+  update(base_form, . ~ . + asinh(total_oda_lag) + nonagg),
+  update(base_form, . ~ . + asinh(total_oda_lag) + defense),
+  update(base_form, . ~ . + asinh(total_oda_lag) + nonagg + defense),
+  update(base_form, . ~ . + asinh(total_oda_lag) + nonagg + defense + nonagg:defense)
 )
-bi_forms <- list(
-  update(base_form, total_oda > 0 ~ .),
-  update(base_form, gov_oda > 0 ~ .),
-  update(base_form, (total_oda - gov_oda) > 0 ~ .),
-  update(base_form, ngo_oda > 0 ~ .),
-  update(base_form, mlt_oda > 0 ~ .),
-  update(base_form, trt_oda > 0 ~ .),
-  update(base_form, otr_oda > 0 ~ .)
-)
 
-# intr_forms <- main_forms %>%
-#   map(
-#     ~ update(.x, ~ . + wgi_stand:nonagg + wgi_stand:defense)
-#   )
-  
+## Via OLS ----
 
-## Via Truncated OLS ----
-
-main_ols_fits <- main_forms %>%
+main_ols_fits <- forms %>%
   map(
     ~ lm_robust(
       .x,
       data = dt,
-      fixed_effects = ~ donor + year,
+      fixed_effects = ~ dyad + year,
       clusters = dyad,
       se_type = 'stata'
     )
   )
-# intr_ols_fits <- intr_forms %>%
+save(
+  main_ols_fits,
+  file = here::here("04_regression_output",
+                    "main_ols_fits.R")
+)
+# ## Via PPML ----
+# 
+# ppml <- function(..., clusters = NULL) {
+#   cat("\nWorking...")
+#   fit <- glm(..., family = quasipoisson)
+#   if(is.null(clusters)) {
+#     vcv <- sandwich::vcovHC(fit, type = 'HC1')
+#   } else {
+#     vcv <- sandwich::vcovCL(fit, clusters = clusters)
+#   }
+#   return(
+#     list(
+#       fit = fit,
+#       vcv = vcv
+#     )
+#   )
+#   cat("\nDone!\n")
+# }
+# main_ppml_fits <- forms %>%
 #   map(
-#     ~ lm_robust(
-#       .x,
+#     ~ ppml(
+#       update(.x, ~ . + dyad + year),
 #       data = dt,
-#       fixed_effects = ~ donor + year,
-#       clusters = dyad,
-#       se_type = 'stata'
+#       clusters = dt$dyad
 #     )
 #   )
-
-## Via Tobit ----
-
-main_tfe_fits <- main_forms %>%
-  map(
-    ~ {
-      tob <- tobit(
-        update(.x, ~ . + donor + as.factor(year)),
-        data = dt 
-      )
-      tob$var <- vcovCL(tob, cluster = dt$dyad, type = 'HC1')
-      tob
-    }
-  )
-# intr_tfe_fits <- intr_forms %>%
-#   map(
-#     ~ {
-#       tob <- tobit(
-#         update(.x, ~ . + donor + as.factor(year)),
-#         data = dt
-#       )
-#       tob$var <- vcovCL(tob, cluster = dt$dyad, type = 'HC1')
-#       tob
-#     }
-#   )
-
-
-## Via Mixed Effects Tobit ----
-
-main_tme_fits <- main_forms %>%
-  map(
-    ~ censReg(
-      update(.x, ~ . + donor + poly(year, 3)),
-      data = plm::pdata.frame(dt, index = 'dyad'),
-      method = 'BHHH',
-      nGHQ = 4
-    )
-  )
-
-
-## Via Mixed Effects Logit ----
-main_lme_fits <- bi_forms[1:5] %>%
-  map(
-    ~ gam(
-      update(.x, ~ . + donor + poly(year, 3) + s(id, bs = 're')),
-      data = dt %>% mutate(id = as.numeric(as.factor(dyad))),
-      family = binomial,
-      method = 'REML'
-    )
-  )
-# intr_tme_fits <- intr_forms %>%
-#   map(
-#     ~ censReg(
-#       update(.x, ~ . + donor + poly(year, 3)),
-#       data = plm::pdata.frame(dt, index = 'dyad'),
-#       method = 'BHHH',
-#       nGHQ = 4
-#     )
-#  )
-
-## Via PPML ----
-
-ppml <- function(..., clusters = NULL) {
-  fit <- glm(..., family = quasipoisson)
-  if(is.null(clusters)) {
-    vcv <- sandwich::vcovHC(fit, type = 'HC0')
-  } else {
-    vcv <- sandwich::vcovCL(fit, clusters = clusters)
-  }
-  return(
-    list(
-      fit = fit,
-      vcv = vcv
-    )
-  )
-}
-main_ppml_fits <- list(
-  update(base_form, total_oda ~ .),
-  update(base_form, gov_oda ~ .),
-  update(base_form, total_oda - gov_oda ~ .),
-  update(base_form, ngo_oda ~ .),
-  # update(base_form, asinh(ppp_oda) ~ .), # no public private partnerships
-  update(base_form, mlt_oda ~ .),
-  update(base_form, trt_oda ~ .),
-  update(base_form, otr_oda ~ .)
-) %>%
-  map(
-    ~ ppml(
-      update(.x, ~ . + donor + poly(year, 3)),
-      data = dt,
-      clusters = dt$dyad
-    )
-  )
-
-main_ppml_fits[1:3] %>%
-  map_dfr(
-    ~ coeftest(
-      .x$fit, vcov. = .x$vcv
-    ) %>%
-      estimatr::tidy() %>%
-      filter(term %in% c('nonagg', 'defense'))
-  )
-# estimate logged-proportional odds model via mixed effects logit
-
-# lme_fit <- gam(
-#   update(base_form, p_public ~ . + s(id, bs = 're')),
-#   data = dt%>% mutate(id = as.numeric(as.factor(dyad))),
-#   family = binomial,
-#   method = 'REML'
-# )
-
 
 
 # regression tables -------------------------------------------------------
@@ -220,485 +131,324 @@ main_ppml_fits[1:3] %>%
 library(texreg)
 cmap <- list(
   'nonagg' = 'Nonaggression',
-  'defense' = 'Defense'
+  'defense' = 'Defense',
+  'nonagg:defense' = 'Interaction'
 )
-model_names <- c(
-  'Total',
-  'Gov-to-Gov',
-  'Bypass',
-  'NGOs',
-  'MOs',
-  'TRT',
-  'Other'
-)
-screenreg( # OLS fits by total aid and public vs. bypass channels
-  main_ols_fits[1:3], include.ci=F,
+screenreg( # only FEs
+  main_ols_fits[1:4], include.ci=F,
   custom.coef.map = cmap,
-  custom.model.names = model_names[1:3],
   stars = c(0.1,0.05,0.01,0.001)
 )
-screenreg( # OLS fits by bypass channel type
-  main_ols_fits[-c(1:3)], include.ci = F,
+screenreg( # FEs + DV lag 
+  main_ols_fits[5:8], include.ci=F,
   custom.coef.map = cmap,
-  custom.model.names = model_names[-c(1:3)]
+  stars = c(0.1,0.05,0.01,0.001)
 )
-# screenreg(
-#   intr_ols_fits, include.ci=F,
-#   custom.coef.map = cmap
-# )
-screenreg( # Tobit fits by total aid and public vs. bypass channels
-  main_tfe_fits[1:3], include.ci=F,
+screenreg( # FEs + controls
+  main_ols_fits[9:12], include.ci=F,
   custom.coef.map = cmap,
-  custom.model.names = model_names[1:3]
+  stars = c(0.1,0.05,0.01,0.001)
 )
-screenreg( # Tobit fits by bypass channel type
-  main_tfe_fits[-c(1:3)], include.ci = F,
+screenreg( # FEs + lag + controls
+  main_ols_fits[13:16], include.ci=F,
   custom.coef.map = cmap,
-  custom.model.names = model_names[-c(1:3)]
+  stars = c(0.1,0.05,0.01,0.001)
 )
-# screenreg(
-#   intr_tfe_fits,
-#   custom.coef.map = cmap
-# )
-screenreg( # ME Tobit fits by total aid and public vs. bypass channels
-  main_tme_fits[1:3], include.ci=F,
-  custom.coef.map = cmap,
-  custom.model.names = model_names[1:3]
-)
-screenreg( # ME Tobit fits by bypass channel type (only first two)
-  main_tme_fits[4:7], include.ci = F,
-  custom.coef.map = cmap,
-  custom.model.names = model_names[4:7]
-)
-screenreg( # ME logit fits for bypass channels that won't converge with ME Tobit
-  main_lme_fits[4:7], include.ci = F,
-  custom.coef.map = cmap,
-  custom.model.names = model_names[4:7]
-)
-# screenreg(
-#   intr_tme_fits,
-#   custom.coef.map = cmap
-# )
-# screenreg(
-#   lme_fit,
-#   custom.coef.map = cmap
-# )
 
-# coefplots ---------------------------------------------------------------
-
-tidy_fits1 <- main_tfe_fits %>%
-  map_dfr(
-    ~ coeftest(.x) %>%
-      estimatr::tidy()
+# stylized facts ----------------------------------------------------------
+dt %>%
+  mutate(
+    alliance = (nonagg | defense)+0
   ) %>%
-  filter(
-    term %in% c('nonagg', 'defense')
+  group_by(
+    dyad
   ) %>%
   mutate(
-    ODA = rep(
-      model_names,
-      each = 2
-    ),
-    method = 'Tobit (Rob. SEs)'
+    ally_switch = c(NA, diff(alliance, na.rm=T)),
+    aid_change = c(NA, diff(total_oda))
+  ) %>%
+  ungroup %>%
+  filter(ally_switch!=0) %>%
+  group_by(ally_switch) %>%
+  summarize(
+    increase = #sum(aid_change > 0),
+      median(aid_change[aid_change>0]),
+    decrease = #sum(aid_change < 0)
+      median(aid_change[aid_change<0])
   )
-tidy_fits2 <- main_tme_fits %>%
-  map_dfr(
-    ~ coeftest(.x) %>%
-      estimatr::tidy()
-  ) %>%
-  filter(
-    term %in% c('nonagg', 'defense')
-  ) %>%
+
+dt %>%
+  group_by(year) %>%
+  summarize(
+    allies = sum(nonagg | defense) ,
+    defense = sum(defense) ,
+    nonagg = sum(nonagg) 
+  )
+
+dt %>%
+  group_by(donor) %>%
   mutate(
-    ODA = rep(
-      model_names,
-      each = 2
+    have_def = any(defense)
+  ) %>%
+  ungroup %>%
+  filter(have_def) %>%
+  count(donor)
+
+
+# jack-knife --------------------------------------------------------------
+
+# I need to make a helper that residualizes the data by dyad
+# and year so I can do the leave-one-donor out validation
+demean <- function(form, data) {
+  mm <- model.frame(update(form, ~ . + dyad + year + donor), data)
+  mm %>%
+    select(-c(dyad, year, donor)) %>%
+    mutate(
+      across(
+        everything(),
+        ~ resid(lm(.x ~ mm$dyad + mm$year))
+      ),
+      donor = mm$donor
+    )
+}
+# I only want to run this once bc it takes forever!
+if(!exists(here::here("01_data", "jackdata.csv"))) {
+  jackforms <- list(
+    base_form,
+    update(base_form, ~ . + nonagg),
+    update(base_form, ~ . + defense),
+    update(base_form, ~ . + nonagg + defense),
+    update(base_form, ~ . + total_oda_lag),
+    update(base_form, ~ . + total_oda_lag + 
+             nonagg),
+    update(base_form, ~ . + total_oda_lag +
+             defense),
+    update(base_form, ~ . + total_oda_lag +
+             nonagg + defense)
+  )
+  jackdata <- demean(jackforms[[8]], dt)
+  # whew! that took a while...
+  names(jackdata) <- names(jackdata) %>%
+    str_remove("asinh") %>%
+    gsub("[()]", "", .)
+  write_csv(jackdata, here::here("01_data", "jackdata.csv"))
+} else {
+  jackdata <- read_csv(here::here("01_data", "jackdata.csv"))
+}
+
+# make formulas
+base_form <- total_oda ~ 
+  # controls
+  income_lag + pop_lag + disaster + 
+  civilwar+ fh_total_lag + dist + trade_lag +
+  fdi_lag + wgi_stand_lag + usmil 
+
+jackforms <- list(
+  base_form,
+  update(base_form, ~ . + nonagg),
+  update(base_form, ~ . + defense),
+  update(base_form, ~ . + nonagg + defense),
+  update(base_form, ~ . + total_oda_lag),
+  update(base_form, ~ . + total_oda_lag + 
+           nonagg),
+  update(base_form, ~ . + total_oda_lag +
+           defense),
+  update(base_form, ~ . + total_oda_lag +
+           nonagg + defense)
+)
+
+donors <- dt$donor %>%
+  unique()
+
+donors %>%
+  map_dfr(
+    ~ {
+      drop_donor <- .x
+      jackforms %>%
+        map_dfr(
+          ~ {
+            lm(
+              .x,
+              data = filter(jackdata, donor != drop_donor)
+            ) -> fit
+            pred_data <- filter(jackdata, donor == drop_donor)
+            predict(
+              fit, newdata = pred_data
+            ) -> pred
+            r <- sqrt(mean((pred_data$total_oda - pred)^2))
+            tibble(
+              R2 = r
+            ) %>%
+              mutate(
+                donor = drop_donor,
+                fit = list(fit)
+              )
+    })
+  }
+) -> jack_val
+
+jack_val %>%
+  mutate(
+    model = rep(
+      c("+ 0",
+        "+ Nonagg.",
+        "+ Defense",
+        "+ Nonagg. + Defense"),
+      len = n()
     ),
-    method = 'Tobit (Dyadic MEs)'
-  )
-tidy_fits3 <- main_lme_fits %>%
-  map_dfr(
-    ~ coeftest(.x) %>%
-      estimatr::tidy()
+    design = rep(
+      c("D-in-D", "lagged-DV"),
+      each = 4
+    ) %>% rep(len = n())
   ) %>%
-  filter(
-    term %in% c('nonagg', 'defense')
-  ) 
-tidy_fits4 <- main_ppml_fits %>%
-  map_dfr(
-    ~ coeftest(.x$fit, vcov. = .x$vcv) %>%
-      estimatr::tidy()
+  group_by(donor, design) %>%
+  mutate(
+    R2change = R2 - R2[model == "+ 0"]
   ) %>%
-  filter(
-    term %in% c('nonagg', 'defense')
-  )
-tidy_fits3$ODA <- rep(model_names[1:5], each = 2)
-tidy_fits3$method <- "Logit (Dyadic MEs)"
-tidy_fits4$ODA <- rep(model_names, each = 2)
-tidy_fits4$method <- "PPML (Robust SEs)"
-  # mutate(
-  #   ODA = rep(
-  #     model_names,
-  #     each = 2
-  #   ),
-  #   method = 'Logit (Dyadic MEs)'
-  # )
-tidy_fits <- bind_rows(tidy_fits1, tidy_fits2)
+  ungroup -> jack_val
 
-
-library(patchwork)
-p1 <- tidy_fits2 %>%
-  filter(ODA=='Total') %>%
+jack_val %>%
+  filter(R2change != 0) %>%
+  group_by(
+    model, design
+  ) %>%
+  summarize(
+    mean = mean(R2change),
+    median = median(R2change),
+    min = min(R2change),
+    max = max(R2change),
+    improved = paste0(round(100 * mean(R2change < 0), 2), "%")
+  ) %>%
   ggplot() +
-  aes(
-    x = estimate,
-    xmin = estimate - 1.96 * std.error,
-    xmax = estimate + 1.96 * std.error,
-    y = term,
-    label = round(estimate, 2)
-  ) +
-  geom_point() +
+  aes(y = model) +
+  facet_wrap(~ design) +
   geom_errorbarh(
-    height = 0
+    aes(xmin = min,
+        xmax = max),
+    height = 0.25
+  ) +
+  geom_point(
+    aes(x = mean),
+    color = "darkred"
+  ) +
+  geom_point(
+    aes(x = median),
+    color = "darkblue",
+    shape = 12
   ) +
   geom_text(
+    aes(x = (mean + max)/2,
+        label = improved),
     vjust = -1
   ) +
-  geom_vline(
-    xintercept = 0,
-    lty = 2
-  ) +
-  scale_y_discrete(
-    labels = c(
-      'Defense',
-      'Nonaggression'
-    )
-  ) +
   labs(
-    x = 'Estimate with 95% CI',
-    y = NULL,
-    title = 'Total ODA'
-  ) +
-  theme_light()
-
-p2 <- ggplot(tidy_fits2 %>%
-         filter(ODA %in% c('Gov-to-Gov', 'Bypass'))) +
-  aes(
-    x = estimate,
-    xmin = estimate - 1.96 * std.error,
-    xmax = estimate + 1.96 * std.error,
-    y = term,
-    color = ODA,
-    label = round(estimate, 2)
-  ) +
-  geom_point(
-    position = ggstance::position_dodgev(-.5)
-  ) +
-  geom_errorbarh(
-    position = ggstance::position_dodgev(-.5),
-    height = 0
-  ) +
-  geom_text(
-    show.legend = F,
-    vjust = -1,
-    position = ggstance::position_dodgev(-.5)
-  ) +
-  geom_vline(
-    xintercept = 0,
-    lty = 2
-  ) +
-  labs(
-    x = 'Estimate with 95% CIs',
-    y = NULL,
-    color = 'Channel',
-    title = 'ODA by delivery channel'
-  ) +
-  scale_y_discrete(
-    labels = c('Defense', 'Nonaggression')
-  ) +
-  theme_light() +
-  theme(
-    legend.position = c(0.2,0.7),
-    legend.background = element_rect(
-      color = 'black'
-    )
-  )
-p1 + p2
-ggsave(
-    here("03_figures/main_effects.png"),
-    dpi = 1200,
-    height = 3,
-    width = 10
+    x = "Difference in RMSE",
+    y = NULL
   )
 
-p1 <- tidy_fits4 %>%
-  filter(ODA=='Total') %>%
+set_palette(
+  binary = c("darkblue",
+             "lightblue"),
+  from_coolors = F
+)
+jack_val %>%
+  arrange(R2change) %>%
+  filter(model =="+ Nonagg. + Defense") %>%
+  select(donor, R2change, design) %>%
   ggplot() +
-  aes(
-    x = estimate,
-    xmin = estimate - 1.96 * std.error,
-    xmax = estimate + 1.96 * std.error,
-    y = term,
-    label = round(estimate, 2)
-  ) +
+  aes(x = R2change,
+      y = reorder(donor, -R2change),
+      shape = design,
+      color = design) +
   geom_point() +
-  geom_errorbarh(
-    height = 0
-  ) +
-  geom_text(
-    vjust = -1
-  ) +
   geom_vline(
-    xintercept = 0,
-    lty = 2
+    xintercept = 0
   ) +
-  scale_y_discrete(
-    labels = c(
-      'Defense',
-      'Nonaggression'
-    )
+  ggpal(
+    type = "binary"
   ) +
+  facet_wrap(~ ifelse(
+    R2change < 0, "Predictions Improved",
+    "Predictions Worsened"
+  ),
+  scales = "free_y") +
   labs(
-    x = 'Estimate with 95% CI',
+    x = "Change in RMSE",
     y = NULL,
-    title = 'Total ODA'
+    color = NULL,
+    shape = NULL
   ) +
-  theme_light()
-
-p2 <- ggplot(tidy_fits4 %>%
-               filter(ODA %in% c('Gov-to-Gov', 'Bypass'))) +
-  aes(
-    x = estimate,
-    xmin = estimate - 1.96 * std.error,
-    xmax = estimate + 1.96 * std.error,
-    y = term,
-    color = ODA,
-    label = round(estimate, 2)
-  ) +
-  geom_point(
-    position = ggstance::position_dodgev(-.5)
-  ) +
-  geom_errorbarh(
-    position = ggstance::position_dodgev(-.5),
-    height = 0
-  ) +
-  geom_text(
-    show.legend = F,
-    vjust = -1,
-    position = ggstance::position_dodgev(-.5)
-  ) +
-  geom_vline(
-    xintercept = 0,
-    lty = 2
-  ) +
-  labs(
-    x = 'Estimate with 95% CIs',
-    y = NULL,
-    color = 'Channel',
-    title = 'ODA by delivery channel'
-  ) +
-  scale_y_discrete(
-    labels = c('Defense', 'Nonaggression')
-  ) +
-  theme_light() +
   theme(
-    legend.position = c(0.2,0.7),
-    legend.background = element_rect(
-      color = 'black'
-    )
+    legend.position = "right",
+    legend.direction = "vertical"
   )
-p1 + p2
 ggsave(
-  here("03_figures/main_ppml_effects.png"),
-  dpi = 1200,
-  height = 3,
-  width = 10
+  here::here("03_figures",
+             "crosval.png"),
+  dpi = 500,
+  height = 6,
+  width = 6
 )
 
-p1 <- tidy_fits3 %>%
-  filter(ODA=='Total') %>%
-  ggplot() +
-  aes(
-    x = estimate,
-    xmin = estimate - 1.96 * std.error,
-    xmax = estimate + 1.96 * std.error,
-    y = term,
-    label = round(estimate, 2)
-  ) +
-  geom_point() +
-  geom_errorbarh(
-    height = 0
-  ) +
-  geom_text(
-    vjust = -1
-  ) +
-  geom_vline(
-    xintercept = 0,
-    lty = 2
-  ) +
-  scale_y_discrete(
-    labels = c(
-      'Defense',
-      'Nonaggression'
-    )
-  ) +
-  labs(
-    x = 'Estimate with 95% CI',
-    y = NULL,
-    title = 'Total ODA'
-  ) +
-  theme_light()
-
-p2 <- ggplot(tidy_fits3 %>%
-               filter(ODA %in% c('Gov-to-Gov', 'Bypass'))) +
-  aes(
-    x = estimate,
-    xmin = estimate - 1.96 * std.error,
-    xmax = estimate + 1.96 * std.error,
-    y = term,
-    color = ODA,
-    label = round(estimate, 2)
-  ) +
-  geom_point(
-    position = ggstance::position_dodgev(-.5)
-  ) +
-  geom_errorbarh(
-    position = ggstance::position_dodgev(-.5),
-    height = 0
-  ) +
-  geom_text(
-    show.legend = F,
-    vjust = -1,
-    position = ggstance::position_dodgev(-.5)
-  ) +
-  geom_vline(
-    xintercept = 0,
-    lty = 2
-  ) +
-  labs(
-    x = 'Estimate with 95% CIs',
-    y = NULL,
-    color = 'Channel',
-    title = 'ODA by delivery channel'
-  ) +
-  scale_y_discrete(
-    labels = c('Defense', 'Nonaggression')
-  ) +
-  theme_light() +
-  theme(
-    legend.position = c(0.2,0.7),
-    legend.background = element_rect(
-      color = 'black'
-    )
-  )
-p1 + p2
-ggsave(
-  here("03_figures/main_logit_effects.png"),
-  dpi = 1200,
-  height = 3,
-  width = 10
-)
-
-`%nin%` <- Negate(`%in%`)
-p1 <- ggplot(tidy_fits1 %>%
-         filter(ODA %nin% c('Total','Gov-to-Gov', 'Bypass'))) +
-  aes(
-    x = estimate,
-    xmin = estimate - 1.96 * std.error,
-    xmax = estimate + 1.96 * std.error,
-    y = term,
-    color = ODA
-  ) +
-  geom_point(
-    position = ggstance::position_dodgev(-.5)
-  ) +
-  geom_errorbarh(
-    position = ggstance::position_dodgev(-.5),
-    height = 0
-  ) +
-  geom_vline(
-    xintercept = 0,
-    lty = 2
-  ) +
-  labs(
-    x = 'Estimate with 95% CIs',
-    y = NULL,
-    color = 'Bypass Channel',
-    title = 'Classic Tobit with cluster-robust SEs'
-  ) +
-  scale_y_discrete(
-    labels = c('Defense', 'Nonaggression')
-  ) +
-  theme_light() +
-  theme(
-    legend.position = c(0.2,0.65),
-    legend.background = element_rect(
-      color = 'black'
-    )
-  )
-p2 <- ggplot(tidy_fits3 %>%
-               filter(ODA %nin% c('Total','Gov-to-Gov', 'Bypass'))) +
-  aes(
-    x = estimate,
-    xmin = estimate - 1.96 * std.error,
-    xmax = estimate + 1.96 * std.error,
-    y = term,
-    color = ODA
-  ) +
-  geom_point(
-    position = ggstance::position_dodgev(-.5)
-  ) +
-  geom_errorbarh(
-    position = ggstance::position_dodgev(-.5),
-    height = 0
-  ) +
-  geom_vline(
-    xintercept = 0,
-    lty = 2
-  ) +
-  labs(
-    x = 'Estimate with 95% CIs',
-    y = NULL,
-    color = 'Bypass Channel',
-    title = 'Mixed effects logistic regression'
-  ) +
-  scale_y_discrete(
-    labels = c('Defense', 'Nonaggression')
-  ) +
-  theme_light() +
-  theme(
-    legend.position = 'none'
+dt %>%
+  group_by(donor) %>%
+  summarize(
+    defense = sum(defense==1)+0,
+    nonagg = sum(nonagg==1)+0
+  ) %>%
+  right_join(
+    jack_val, by = "donor"
+  ) %>%
+  group_by(defense, nonagg) %>%
+  filter(model == "+ Nonagg. + Defense") %>%
+  summarize(
+    improved = 100 * mean(R2change < 0),
+    donors = paste0(unique(donor), collapse = ", ")
+  ) %>%
+  ungroup %>%
+  data.frame %>%
+  stargazer::stargazer(
+    summary = F
   )
 
-p1 + p2
-ggsave(
-  here("03_figures/bypass_effects.png"),
-  dpi = 1200,
-  height = 3,
-  width = 10
+# sensitivity analysis with sensemakr -------------------------------------
+
+library(sensemakr)
+dd_def_sen <- sensemakr(
+  jackforms[[4]], data = jackdata,
+  treatment = "defense",
+  benchmark_covariates = c("income_lag",
+                           "pop_lag"),
+  kd = 1:3
+)
+dd_non_sen <- sensemakr(
+  jackforms[[4]], data = jackdata,
+  treatment = "nonagg",
+  benchmark_covariates = c("income_lag",
+                           "pop_lag"),
+  kd = 1:3
+)
+ld_def_sen <- sensemakr(
+  jackforms[[8]], data = jackdata,
+  treatment = "defense",
+  benchmark_covariates = c("income_lag",
+                           "pop_lag"),
+  kd = 1:3
+)
+ld_non_sen <- sensemakr(
+  jackforms[[8]], data = jackdata,
+  treatment = "nonagg",
+  benchmark_covariates = c("income_lag",
+                           "pop_lag"),
+  kd = 1:3
 )
 
-# save the main regression results
-save(
-  main_ols_fits,
-  file = here("04_regression_output/main_ols_fits.R")
-)
-save(
-  main_tfe_fits,
-  file = here("04_regression_output/main_tfe_fits.R")
-)
-save(
-  main_tme_fits,
-  file = here("04_regression_output/main_tme_fits.R")
-)
-save(
-  main_lme_fits,
-  file = here("04_regression_output/main_lme_fits.R")
-)
-save(
-  main_ppml_fits,
-  file = here("04_regression_output/main_ppml_fits.R")
-)
+summary(dd_def_sen)
+summary(dd_non_sen)
+summary(ld_def_sen)
+summary(ld_non_sen)
 
-
-
+ovb_minimal_reporting(dd_def_sen)
+ovb_minimal_reporting(dd_non_sen)
+ovb_minimal_reporting(ld_def_sen)
+ovb_minimal_reporting(ld_non_sen)

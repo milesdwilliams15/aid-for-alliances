@@ -31,6 +31,28 @@ dt <- dt %>%
     p_public = 1 - p_bypass
   )
 
+# summary table -----------------------------------------------------------
+
+stargazer::stargazer(
+  dt %>% filter(year > 2005) %>%
+    data.frame()
+)
+
+# variation in alliances --------------------------------------------------
+
+dt %>%
+  filter(year > 2005) %>%
+  group_by(donor) %>%
+  count(defense) %>%
+  filter(defense  == 1) 
+
+dt %>%
+  filter(year > 2005) %>%
+  group_by(donor) %>%
+  count(nonagg) %>%
+  filter(nonagg  == 1) %>%
+  view()
+
 # average aid by allies and non allies ------------------------------------
 
 theme_set(theme_light())

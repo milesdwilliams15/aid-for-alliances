@@ -1,0 +1,42 @@
+---
+output: stevetemplates::cover_letter
+geometry: margin=1in
+header-includes:
+  - \linespread{1.05}
+
+# author: Steven V. Miller
+address: | 
+    | Denison University
+    | 100 W College St,
+    | Granville, OH
+email: "williamsmd@denison.edu"
+#url: svmiller.com
+#phone: +1 555 867 5309
+fontsize: 11pt
+mainfont: cochineal
+monofont: Fira Code
+
+#fontawesome: TRUE
+date: "`r format(Sys.time(), '%d %B %Y')`"
+greetings: "Dear Editorial Team:"
+---
+
+I would like to submit this original research article entitled "Aid for Alliances? Buying and Selling Alliances in the Political Economy of Aid" for consideration by *International Studies Quarterly*. This manuscript is original, has not been published previously, and is not currently under review or being considered elsewhere.
+
+In this paper, I show that developed countries target more aid in developing countries with which they share a nonaggression pact, and less aid in developing countries with which they share a defensive pact. This finding is significant in light of the conventional view shared among IR scholars that donor countries reward allies with greater aid. I show, instead, that the nature of alliance commitments makes a difference in whether donors reward or (surprisingly) cut aid to allies. This is a distinction that past research has failed to address and its recognition is important both for understanding the political objectives of foreign aid donors and the substantive impact of the content of alliance promises on signatory behavior.
+
+I propose a logic of aid-for-alliance exchange where the substance and direction of alliance promises is relevant for understanding why donors might increase or cut foreign aid in allies. Of the two most prevalent kinds of alliances that developed and developing countries sign---nonaggression pacts and defensive pacts---the first has been shown by previous studies to correspond with efforts to foster cooperation in the wake of heightened tension and mistrust. The second, meanwhile, reflects a commitment to militarily intervene if an ally is attacked. I posit that the first kind of alliance reflects a kind of aid-for-policy exchange, where donors use aid as a material incentive to get a recipient to agree to a nonaggression pact. The second kind of alliance, alternatively, reflects an asymmetric security commitment from developed country donors. Due to the differences in material capabilities between developed and developing countries, the offer of defense in the face of attack disproportionately benefits developing country signatories rather than the generally more powerful developed countries. My findings are consistent with this logic and even endure when the mode of aid delivery is taken into account. 
+
+Given the ubiquity of the view that donors reward allies with greater aid, these findings should be of interest to readers of *International Studies Quarterly*. Research on alliances and on foreign aid have made regular appearances in this journal, but rarely are they examined together. For this reason, the simplistic idea that allies receive more foreign aid has endured. This study puts this conventional wisdom to the test and finds it wanting.
+
+I have no conflicts of interest to disclose. All correspondence concerning this manuscript can be addressed to me at `williamsmd@denison.edu`.
+
+Thank you for your consideration.
+
+Best regards,
+
+Dr. Miles D. Williams, Ph.D.
+
+Visiting Assistant Professor, Data for Political Research
+
+Denison University
